@@ -1,0 +1,30 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <a href="{{ url("convocation", convocation.number) }}" class="flying-leader"><img class="img-circle" src="{{ MEDIA_URL }}{{ convocation.img }}" alt="" width="140" height="140"></a>
+        <h2><a href="{{ url("convocation", convocation.number) }}">{{ convocation.number }} скликання</a></h2>
+        <p>{{ convocation.year_from }}{% if convocation.year_to %}—{{ convocation.year_to }}{% endif %}</p>
+        <p>Знаємо про <strong>{{ convocation.num_minions }}</strong> помічників у <strong>{{ convocation.num_mps }}</strong> нардепів</p>
+    </div><!-- /.col-lg-4 -->
+</div><!-- /.row -->
+
+<div class="row">
+    <table class="table minions-table">
+    {% for mps in minions|groupby('mp.name') %}
+    <tr>
+        <th colspan="2" class="colheader">
+            <h3><a href="#">{{ mps.list[0].mp.name }}</a></h3>
+        </th>
+    </tr>
+    {% for minion in mps.list %}
+        <tr>
+            <td><a href="#">{{ minion.name }}</a></td>
+            <td>{{ minion.paid }}</td>
+        </tr>
+    {% endfor %}
+    {% endfor %}
+    </table>
+</div><!-- /.row -->
+{% endblock %}

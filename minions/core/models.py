@@ -1,10 +1,14 @@
+import re
+from string import capwords
 from django.db import models
+from django.forms.models import model_to_dict
 
 
 class Convocation(models.Model):
     number = models.IntegerField("Скликання", primary_key=True)
     year_from = models.IntegerField("З", blank=True, null=True)
     year_to = models.IntegerField("По", blank=True, null=True)
+    img = models.ImageField(blank=True)
 
     def __unicode__(self):
         return "%s скликання" % (self.number)
@@ -33,15 +37,83 @@ class MemberOfParliament(models.Model):
     def __str__(self):
         return self.__unicode__()
 
+    def to_dict(self):
+        """
+        Convert Minion model to an indexable presentation for ES.
+        """
+        return model_to_dict(self, fields=[
+            "id", "convocation_id", "name", "party", "link", "district",
+            "date_from", "date_to"])
+
     class Meta:
         verbose_name = "Депутат"
         verbose_name_plural = "Депутати"
+
+
+def title(s):
+    chunks = s.split()
+    chunks = map(lambda x: capwords(x, u"-"), chunks)
+    return u" ".join(chunks)
+
+
+def parse_fullname(person_name):
+    # Extra care for initials (especialy those without space)
+    person_name = re.sub("\s+", " ",
+                         person_name.replace(".", ". ").replace('\xa0', " "))
+
+    chunks = person_name.strip().split(" ")
+
+    last_name = ""
+    first_name = ""
+    patronymic = ""
+
+    if len(chunks) == 2:
+        last_name = title(chunks[0])
+        first_name = title(chunks[1])
+    elif len(chunks) > 2:
+        last_name = title(" ".join(chunks[:-2]))
+        first_name = title(chunks[-2])
+        patronymic = title(chunks[-1])
+
+    return last_name, first_name, patronymic
 
 
 class Minion(models.Model):
     mp = models.ForeignKey("MemberOfParliament", verbose_name="Депутат")
     name = models.CharField("ПІБ", max_length=200)
     paid = models.CharField("Засади", max_length=200)
+
+    def to_dict(self):
+        """
+        Convert Minion model to an indexable presentation for ES.
+        """
+        d = model_to_dict(self, fields=["id", "name", "paid"])
+
+        d["mp"] = self.mp.to_dict()
+
+        def generate_suggestions(last_name, first_name, patronymic):
+            if not last_name:
+                return []
+
+            return [
+                " ".join([last_name, first_name, patronymic]),
+                " ".join([first_name, patronymic, last_name]),
+                " ".join([first_name, last_name])
+            ]
+
+        d["name_suggest"] = {
+            "input": generate_suggestions(*parse_fullname(self.name)),
+            "output": self.name
+        }
+
+        d["mp_name_suggest"] = {
+            "input": generate_suggestions(*parse_fullname(self.mp.name)),
+            "output": self.mp.name
+        }
+
+        d["_id"] = d["id"]
+
+        return d
 
     class Meta:
         verbose_name = "Помічник"

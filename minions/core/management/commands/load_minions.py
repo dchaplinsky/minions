@@ -40,7 +40,7 @@ class Command(BaseCommand):
                     "district": row[2],
                     "date_from": dt_parse(row[3][:10], dayfirst=True),
                     "date_to": dt_parse(row[4][:10], dayfirst=True),
-                    "link": row[5],
+                    "link": row[5] if "redlink=1" not in row[5] else "",
                 }
 
         conv, _ = Convocation.objects.get_or_create(
