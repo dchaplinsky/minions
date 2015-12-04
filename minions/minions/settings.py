@@ -154,6 +154,7 @@ TEMPLATES = [
     },
 ]
 
+CATALOG_PER_PAGE = 100
 
 try:
     from .local_settings import *

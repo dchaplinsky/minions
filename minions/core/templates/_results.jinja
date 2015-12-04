@@ -1,0 +1,32 @@
+{% from "_pagination.jinja" import render_pagination with context %}
+
+{% macro render_minions(minions) %}
+    <table class="table minions-table">
+        {% for mps in minions|groupby('mp.name') %}
+        {% set mp = mps.list[0].mp %}
+        <tr>
+            <th colspan="2" class="colheader">
+                <h3><a href="{{ url("mp_details", mp.id )}}" data-toggle="tooltip" data-placement="top" title="{% if mp.party %}{{ mp.party }}, {% endif %}{{ mp.convocation }} скликання" class="tooltip-anchor">{{ mp.name }}</a></h3>
+            </th>
+        </tr>
+        {{ render_minions_table(mps.list) }}
+        {% endfor %}
+    </table>
+
+    {% if minions.paginator.num_pages > 1 %}
+    <div class="text-center">
+        <nav>
+        {{ render_pagination(minions, "") }}
+        </nav>
+    </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_minions_table(minions) %}
+    {% for minion in minions %}
+    <tr>
+        <td><a href="{{ url("search") }}?q={{ minion.name|urlencode }}">{{ minion.name }}</a></td>
+        <td>{{ minion.paid }}</td>
+    </tr>
+    {% endfor %}
+{% endmacro %}

@@ -1,6 +1,7 @@
 import re
 from string import capwords
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 
 
@@ -37,12 +38,15 @@ class MemberOfParliament(models.Model):
     def __str__(self):
         return self.__unicode__()
 
+    def get_absolute_url(self):
+        return reverse("mp_details", kwargs={"mp_id": self.pk})
+
     def to_dict(self):
         """
         Convert Minion model to an indexable presentation for ES.
         """
         return model_to_dict(self, fields=[
-            "id", "convocation_id", "name", "party", "link", "district",
+            "id", "convocation", "name", "party", "link", "district",
             "date_from", "date_to"])
 
     class Meta:

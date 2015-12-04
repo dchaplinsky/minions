@@ -1,4 +1,7 @@
 {% extends "base.jinja" %}
+{% from "_pagination.jinja" import render_pagination with context %}
+{% from "_results.jinja" import render_minions with context %}
+{% block title %}: {{ convocation.number }} скликання Верховної Ради України{% endblock%}
 
 {% block content %}
 <div class="row">
@@ -11,20 +14,6 @@
 </div><!-- /.row -->
 
 <div class="row">
-    <table class="table minions-table">
-    {% for mps in minions|groupby('mp.name') %}
-    <tr>
-        <th colspan="2" class="colheader">
-            <h3><a href="#">{{ mps.list[0].mp.name }}</a></h3>
-        </th>
-    </tr>
-    {% for minion in mps.list %}
-        <tr>
-            <td><a href="#">{{ minion.name }}</a></td>
-            <td>{{ minion.paid }}</td>
-        </tr>
-    {% endfor %}
-    {% endfor %}
-    </table>
+    {{ render_minions(minions) }}
 </div><!-- /.row -->
 {% endblock %}

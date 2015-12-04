@@ -1,10 +1,13 @@
 from django.core.management.base import BaseCommand
+from elasticsearch_dsl import Index
+
 from core.models import Minion
 from core.elastic_models import Minion as ElasticMinion
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        Index(ElasticMinion._doc_type.index).delete(ignore=404)
 
         ElasticMinion.init()
         counter = 0
