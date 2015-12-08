@@ -7,8 +7,9 @@ class ConvocationAdmin(admin.ModelAdmin):
 
 
 class MemberOfParliamentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'convocation', 'party', 'date_from', 'date_to']
-    list_select_related = ('convocation',)
+    pass
+    # list_display = ['name', 'convocation', 'party', 'date_from', 'date_to']
+    # list_select_related = ('convocation',)
 
 
 class MinionAdmin(admin.ModelAdmin):

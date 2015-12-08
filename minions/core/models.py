@@ -22,15 +22,32 @@ class Convocation(models.Model):
         verbose_name_plural = "Скликання"
 
 
-class MemberOfParliament(models.Model):
-    convocation = models.ForeignKey("Convocation", verbose_name="Скликання")
-    name = models.CharField("ПІБ", max_length=200)
+class MP2Convocation(models.Model):
     party = models.CharField("Партія", max_length=200, blank=True)
-    link = models.URLField("Посилання", max_length=512, blank=True)
     district = models.CharField("Округ", max_length=200, blank=True)
 
     date_from = models.DateField(blank=True)
     date_to = models.DateField(blank=True)
+
+    mp = models.ForeignKey("MemberOfParliament")
+    convocation = models.ForeignKey("Convocation")
+
+    def __unicode__(self):
+        return "%s, депутат %s скликання" % (self.mp.name, self.convocation_id)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    class Meta:
+        verbose_name = "Належність до скликання"
+        verbose_name_plural = "Належності до скликання"
+
+
+class MemberOfParliament(models.Model):
+    convocations = models.ManyToManyField(
+        "Convocation", verbose_name="Скликання", through="MP2Convocation")
+    name = models.CharField("ПІБ", max_length=200)
+    link = models.URLField("Посилання", max_length=512, blank=True)
 
     def __unicode__(self):
         return "Нардеп %s" % (self.name)
@@ -83,7 +100,7 @@ def parse_fullname(person_name):
 
 
 class Minion(models.Model):
-    mp = models.ForeignKey("MemberOfParliament", verbose_name="Депутат")
+    mp = models.ForeignKey("MP2Convocation", verbose_name="Депутат")
     name = models.CharField("ПІБ", max_length=200)
     paid = models.CharField("Засади", max_length=200)
 

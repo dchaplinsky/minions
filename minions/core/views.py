@@ -2,7 +2,7 @@ from operator import itemgetter
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 from core.elastic_models import Minion as ElasticMinion
 from core.models import Convocation, Minion, MemberOfParliament
@@ -76,16 +76,15 @@ def suggest(request):
 def home(request):
     return render(request, "home.jinja", {
         "convocations": Convocation.objects.order_by("-number").annotate(
-            num_mps=Count('memberofparliament', distinct=True),
-            num_minions=Count('memberofparliament__minion'))
+            num_mps=Count('mp2convocation', distinct=True),
+            num_minions=Count('mp2convocation__minion'))
     })
 
 
 def convocation(request, convocation_id):
     conv = get_object_or_404(Convocation.objects.annotate(
-        num_mps=Count('memberofparliament', distinct=True),
-        num_minions=Count('memberofparliament__minion')),
-
+        num_mps=Count('mp2convocation', distinct=True),
+        num_minions=Count('mp2convocation__minion')),
         number=int(convocation_id))
 
     minions = Minion.objects.select_related("mp").filter(
