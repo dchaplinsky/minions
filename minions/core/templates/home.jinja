@@ -1,14 +1,74 @@
 {% extends "base.jinja" %}
 
+
+{% block body_class %}home_page{% endblock %}
+{% block title %}: реестр помічників народних депутатів Верховної Ради України{% endblock%}
+
+{% block search_form %}{% endblock%}
+
 {% block content %}
-<div class="row">
-    {% for conv in convocations %}
-    <div class="col-lg-4">
-        <a href="{{ url("convocation", conv.number) }}"><img class="img-circle" src="{{ MEDIA_URL }}{{ conv.img }}" alt="" width="140" height="140"></a>
-        <h2><a href="{{ url("convocation", conv.number) }}">{{ conv.number }} скликання</a></h2>
-        <p>{{ conv.year_from }}{% if conv.year_to %}—{{ conv.year_to }}{% endif %}</p>
-        <p>Знаємо про {{ conv.num_minions }} помічників у {{ conv.num_mps }} нардепів</p>
-    </div><!-- /.col-lg-4 -->
-    {% endfor %}
-</div><!-- /.row -->
+<div class="block_main_info">
+	<div class="header_container">
+		<div class="row block_header cf">
+			<div class="col-md-12">
+				<div class="text_content">
+					<h2>Вони серед нас</h2>
+					<p>
+						Энергичные и смешные миньоны живут на планете несколько миллионов лет.
+						Их задача — служить самому гадкому злодею из всех имеющихся. Фараоны, Дракула, Наполеон — все они
+						оказались недолговечны.
+					</p>
+				</div>
+				<form class="form_search" action="{{ url("search") }}" method="GET">
+					<div class="input_wrap cf">
+                        <input type="hidden" name="is_exact" value="" />
+                        <input class="input_search f_left" type="text" placeholder="Знайти посiпаку..." name="q" id="search-q" data-endpoint="{{ url("suggest") }}" autocomplete="off" {% if q %}value="{{ q }}"{% endif %}>
+						<input class="submit_search f_left" type="submit" name="submit" value="">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<section class="main_content">
+		<div class="col-md-12">
+			<div class="head_content">
+				<h1>Посіпаки по скликаням</h1>
+			</div>
+			<div class="test_block">
+				<p>Усьго вiдомо про {{ count_of_minions }} посiпак</p>
+			</div>
+		</div>
+		<div class="col-md-12 elem_blocks cf">
+			{% for conv in convocations %}
+			<div class="posipaks_block cf">
+				<a href="{{ url("convocation", conv.number) }}">
+					<div class="col-md-3 block_count_and_period f_left cf">
+						<div class="count f_left">
+							<p>{{ conv.number }}</p>
+						</div>
+						<div class="period f_left">
+							<p>{{ conv.year_from }}</p>
+							{% if conv.year_to %}
+							<p>-</p>
+							<p>{{ conv.year_to }}</p>
+							{% endif %}
+						</div>
+					</div>
+					<div class="col-md-9 helpers f_left cf">
+						<div class="col-md-6 left_block f_left">
+							<p><span>{{ conv.num_minions }}</span> помічників у</p>
+						</div>
+						<div class="col-md-6 right_block f_left">
+							<p><span>{{ conv.num_mps }}</span> нардепів</p>
+						</div>
+					</div>
+				</a>
+			</div>
+			{% endfor %}
+		</div><!-- end elem_blocks-->
+	</section>
+</div>
 {% endblock %}

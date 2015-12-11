@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_jinja',
     'core',
 )
 
@@ -154,7 +155,7 @@ TEMPLATES = [
     },
 ]
 
-CATALOG_PER_PAGE = 100
+CATALOG_PER_PAGE = 10
 
 try:
     from .local_settings import *

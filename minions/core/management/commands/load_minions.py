@@ -64,7 +64,8 @@ class Command(BaseCommand):
 
                     mp, _ = MemberOfParliament.objects.get_or_create(
                         name__iexact=row[0], defaults={
-                            "link": dep_data["link"]
+                            "link": dep_data["link"],
+                            "name": row[0]
                         })
 
                     dep = MP2Convocation.objects.create(
