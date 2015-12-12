@@ -104,6 +104,40 @@ class Minion2MP2Convocation(models.Model):
     minion = models.ForeignKey("Minion")
     paid = models.CharField("Засади", max_length=200)
 
+    def to_dict(self):
+        """
+        Convert Minion model to an indexable presentation for ES.
+        """
+        d = model_to_dict(self, fields=["id", "paid"])
+
+        # d["mp"] = self.mp.to_dict()
+
+        def generate_suggestions(last_name, first_name, patronymic):
+            if not last_name:
+                return []
+
+            return [
+                " ".join([last_name, first_name, patronymic]),
+                " ".join([first_name, patronymic, last_name]),
+                " ".join([first_name, last_name])
+            ]
+
+        d["name_suggest"] = {
+            "input": generate_suggestions(*parse_fullname(self.minion.name)),
+            "output": self.minion.name
+        }
+
+        d["mp_name_suggest"] = {
+            "input": generate_suggestions(
+                *parse_fullname(self.mp2convocation.mp.name)),
+            "output": self.mp2convocation.mp.name
+        }
+
+        d["_id"] = d["id"]
+        d["name"] = self.minion.name
+
+        return d
+
     # def __unicode__(self):
     #     return "%s, депутат %s скликання" % (self.mp.name, self.convocation_id)
 
@@ -120,38 +154,6 @@ class Minion(models.Model):
         "MP2Convocation", verbose_name="Депутат",
         through=Minion2MP2Convocation)
     name = models.CharField("ПІБ", max_length=200, db_index=True)
-
-    def to_dict(self):
-        """
-        Convert Minion model to an indexable presentation for ES.
-        """
-        d = model_to_dict(self, fields=["id", "name", "paid"])
-
-        d["mp"] = self.mp.to_dict()
-
-        def generate_suggestions(last_name, first_name, patronymic):
-            if not last_name:
-                return []
-
-            return [
-                " ".join([last_name, first_name, patronymic]),
-                " ".join([first_name, patronymic, last_name]),
-                " ".join([first_name, last_name])
-            ]
-
-        d["name_suggest"] = {
-            "input": generate_suggestions(*parse_fullname(self.name)),
-            "output": self.name
-        }
-
-        d["mp_name_suggest"] = {
-            "input": generate_suggestions(*parse_fullname(self.mp.name)),
-            "output": self.mp.name
-        }
-
-        d["_id"] = d["id"]
-
-        return d
 
     class Meta:
         verbose_name = "Помічник"
