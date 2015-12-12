@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^search$', 'core.views.search', name='search'),
     url(r'^mp/(?P<mp_id>\d+)$', 'core.views.mp_details',
         name='mp_details'),
+    url(r'^minion/(?P<minion_id>\d+)$', 'core.views.minion_details',
+        name='minion_details'),
     url(r'^convocation/(?P<convocation_id>\d+)$', 'core.views.convocation',
         name='convocation'),
 
@@ -16,3 +18,5 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = "core.views.handler404"

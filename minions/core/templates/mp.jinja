@@ -1,50 +1,77 @@
 {% extends "base.jinja" %}
-{% from "_results.jinja" import render_minions_table %}
-{% block title %}: {{ mp.name }}, помічники народного депутата України {% if mp.party %}від партії {{ mp.party }}{% endif %}{% endblock%}
+{# {% from "_results.jinja" import render_minions_table %} #}
+{% block title %}: {{ mp.name }}, помічники народного депутата України{% endblock%}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-12">
-        <h2 class="text-center">{{ mp.name }}</h2>
-        <table class="table minions-table">
-            <tr>
-                <th>Скликання</th>
-                <td>{{ mp.convocation_id }}</td>
-            </tr>
-            {% if mp.party %}
-            <tr>
-                <th>Партія</th>
-                <td>{{ mp.party }}</td>
-            </tr>
-            {% endif %}
+<div class="block_main_info">
+    <div class="header_container">
+        <div class="row block_header cf">
+            <div class="col-md-12">
+                <div class="header_content">
+                    <h2>{{ mp.name }}</h2>
+                </div>
 
-            {% if mp.district %}
-            <tr>
-                <th>Округ</th>
-                <td>{{ mp.district }}</td>
-            </tr>
-            {% endif %}
+                {% if mp.link %}
+                <div class="text_content">
+                    <a class="find_viki" href="{{ mp.link }}" target="_blank">Читати докладніше на Вікіпедії</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 
-            {% if mp.date_from or mp.date_to %}
-            <tr>
-                <th>Дати</th>
-                <td>{% if mp.date_from|date %}з {{ mp.date_from }}{% endif %} {% if mp.date_to %}по {{ mp.date_to }}{% endif %}</td>
-            </tr>
-            {% endif %}
+<div class="container">
+    <section class="main_content cf">
+        <div class="tab_block">
 
-            {% if mp.link %}
-            <tr>
-                <td colspan="2"><a href="{{ mp.link }}" target="_blank">Читати докладніше на Вікіпедії</a></td>
-            </tr>
-            {% endif %}
-        </table>
-    </div><!-- /.col-lg-4 -->
-</div><!-- /.row -->
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                {% for convocation in mp.mp2convocation_set.all() %}
+                    <li {% if loop.first %}class="active"{% endif %}><a href="#conv_{{ convocation.convocation_id }}" data-toggle="tab">{{ convocation.convocation_id }} скликання</a></li>
+                {% endfor %}
+            </ul>
 
-<div class="row">
-    <h3 class="text-center">Помічники</h3>
-    <table class="table minions-table">
-        {{ render_minions_table(mp.minion_set.all()) }}
-    </table>
-</div><!-- /.row -->
+            <!-- Tab panes -->
+            <div class="tab-content">
+                {% for convocation in mp.mp2convocation_set.all() %}
+                <div class="tab-pane{% if loop.first %} active{% endif %}" id="#conv_{{ convocation.convocation_id }}">
+                    <div class="top_block main_information cf">
+                        {% if convocation.party %}
+                        <p><span class="f_left">Партія</span>{{ convocation.party }}</p>
+                        {% endif %}
+
+                        {% if convocation.district %}
+                        <p><span class="f_left">Округ</span>{{ convocation.district }}</p>
+                        {% endif %}
+
+                        {% if convocation.date_from or convocation.date_to %}
+                        <p><span class="f_left">Період</span>{% if convocation.date_from|date %}з {{ convocation.date_from }}{% endif %} {% if convocation.date_to %}по {{ convocation.date_to }}{% endif %}</p>
+                        {% endif %}
+                    </div>
+                    {% set minions = convocation.minion2mp2convocation_set.select_related("minion").all() %}
+                    <div class="bottom_block list_persons cf">
+                        <div class="person_count">
+                            <p>{{ minions|length }} помiчникiв</p>
+                        </div>
+                        <div class="wrap_block cf">
+                            {% for minion in minions %}
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <a href="{{ url("minion_details", minion.minion.id )}}" class="link_nb">
+                                        <p>{{ minion.minion.name }}</p>
+                                        <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}">{{ minion.paid }}</span>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </section>
+</div>
 {% endblock %}

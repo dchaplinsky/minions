@@ -1,11 +1,12 @@
 from operator import itemgetter
 from django.http import JsonResponse
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-from django.db.models import Count, Sum
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Count
 
 from core.elastic_models import Minion as ElasticMinion
-from core.models import Convocation, Minion, MemberOfParliament, MP2Convocation
+from core.models import (
+    Convocation, Minion, MemberOfParliament, MP2Convocation,
+    Minion2MP2Convocation)
 from core.paginator import paginated, DjangoPageRangePaginator
 
 
@@ -75,7 +76,7 @@ def suggest(request):
 
 def home(request):
     return render(request, "home.jinja", {
-        "count_of_minions": Minion.objects.count(),
+        "count_of_minions": Minion2MP2Convocation.objects.count(),
         "convocations": Convocation.objects.order_by("-number").annotate(
             num_mps=Count('mp2convocation', distinct=True),
             num_minions=Count('mp2convocation__minion'))
@@ -88,18 +89,13 @@ def convocation(request, convocation_id):
         num_minions=Count('mp2convocation__minion')),
         number=int(convocation_id))
 
-    # minions = Minion.objects.select_related("mp", "mp__mp").filter(
-    #     mp__convocation=conv).order_by("mp__mp__name").extra(
-    #     select={'first_letter': "SUBSTR(core_memberofparliament.name, 1, 1)"})
-
-    mps = MP2Convocation.objects.select_related("mp").prefetch_related(
-        "minion_set").filter(convocation=conv).order_by("mp__name").extra(
+    mps = MP2Convocation.objects.select_related("mp").filter(
+        convocation=conv).order_by("mp__name").extra(
         select={'first_letter': "SUBSTR(core_memberofparliament.name, 1, 1)"})
 
-    return render(request, "listing.jinja", {
+    return render(request, "convocation.jinja", {
         "convocation": conv,
         "mps": paginated(request, mps, DjangoPageRangePaginator),
-        # "minions": paginated(request, minions, DjangoPageRangePaginator)
     })
 
 
@@ -124,3 +120,15 @@ def mp_details(request, mp_id):
     return render(request, "mp.jinja", {
         "mp": get_object_or_404(MemberOfParliament, pk=int(mp_id))
     })
+
+
+def minion_details(request, minion_id):
+    return render(request, "minion.jinja", {
+        "minion": get_object_or_404(Minion, pk=int(minion_id))
+    })
+
+
+def handler404(request):
+    response = render(request, '404.jinja')
+    response.status_code = 404
+    return response

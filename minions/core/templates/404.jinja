@@ -1,0 +1,29 @@
+{% extends "base.jinja" %}
+{% block title %}: Poppadom? Para tu! Para tu!{% endblock %}
+
+{% block header %}
+{% endblock %}
+{% block body_class %}error_404{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="main_conten block_404">
+        <div class="col-md-12">
+            <img class="img_404" src="{{ static("images/404.jpg") }}" alt="404">
+            <div class="head_content">
+                <h1>Невiдомий посiпака</h1>
+            </div>
+             <form class="form_search" action="{{ url("search") }}" method="GET">
+                <div class="input_wrap cf">
+                    <input type="hidden" name="is_exact" value="" />
+                    <input class="input_search f_left" type="text" placeholder="Знайти посiпаку..." name="q" id="search-q" data-endpoint="{{ url("suggest") }}" autocomplete="off" {% if q %}value="{{ q }}"{% endif %}>
+                    <input class="submit_search f_left" type="submit" name="submit" value="">
+                </div>
+                <div class="text">
+                    <p>або почнiть з <a class="gold_color" href="{{ url("home") }}">головної</a></p>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}

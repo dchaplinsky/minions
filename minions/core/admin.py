@@ -13,8 +13,9 @@ class MemberOfParliamentAdmin(admin.ModelAdmin):
 
 
 class MinionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'mp', 'paid']
-    list_select_related = ('mp', )
+    pass
+    # list_display = ['name', 'mp', 'paid']
+    # list_select_related = ('mp', )
 
 
 admin.site.register(Convocation, ConvocationAdmin)

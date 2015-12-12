@@ -3,7 +3,9 @@ from csv import reader
 from dateutil.parser import parse as dt_parse
 from django.core.management.base import BaseCommand, CommandError
 
-from core.models import Convocation, MemberOfParliament, Minion, MP2Convocation
+from core.models import (
+    Convocation, MemberOfParliament, Minion, MP2Convocation,
+    Minion2MP2Convocation)
 
 
 class Command(BaseCommand):
@@ -82,9 +84,14 @@ class Command(BaseCommand):
                         raise CommandError(
                             "Minion %s without MP!" % row[1])
 
-                    Minion.objects.create(
-                        mp=dep,
-                        name=row[1],
+                    minion, _ = Minion.objects.get_or_create(
+                        name__iexact=row[1], defaults={
+                            "name": row[1]
+                        })
+
+                    Minion2MP2Convocation.objects.create(
+                        mp2convocation=dep,
+                        minion=minion,
                         paid=row[3]
                     )
 

@@ -1,0 +1,39 @@
+{% extends "base.jinja" %}
+{% block title %}: {{ minion.name }}, помічник народного депутата{% endblock %}
+
+{% block content %}
+    <div class="block_main_info">
+        <div class="header_container">
+            <div class="row block_header cf">
+                <div class="col-md-12">
+                    <div class="text_content">
+                        <h2>{{ minion.name }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <section class="main_content cf">
+            <h3>Був помiчником у депутатiв</h3>
+
+            <div class="block_wrap block_row cf">
+                {% for mp in minion.minion2mp2convocation_set.select_related("mp2convocation", "mp2convocation__mp") %}
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <p><a href="{{ url("mp_details", mp.mp2convocation.mp.id) }}">{{ mp.mp2convocation.mp.name }}</a></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>{{ mp.mp2convocation.party }}, <a href="{{ url("convocation", mp.mp2convocation.convocation_id) }}">{{ mp.mp2convocation.convocation_id }} скликання</a></p>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="radius {% if mp.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}">{{ mp.paid }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+
+{% endblock %}
