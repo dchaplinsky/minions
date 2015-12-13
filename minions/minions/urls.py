@@ -1,7 +1,9 @@
-from django.conf.urls import include, url
+from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps import GenericSitemap
+from django.conf.urls import url
 from django.conf import settings
-from django.contrib import admin
 from django.conf.urls.static import static
+from core.models import Convocation, MemberOfParliament, Minion
 
 urlpatterns = [
     url(r'^ajax/suggest$', 'core.views.suggest', name='suggest'),
@@ -14,7 +16,22 @@ urlpatterns = [
     url(r'^convocation/(?P<convocation_id>\d+)$', 'core.views.convocation',
         name='convocation'),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^sitemap\.xml$', sitemap, {
+        'sitemaps': {
+            "convocations": GenericSitemap({
+                'queryset': Convocation.objects.all()
+            }),
+            "mps": GenericSitemap({
+                'queryset': MemberOfParliament.objects.all()
+            }),
+            "minions": GenericSitemap({
+                'queryset': Minion.objects.all()
+            }),
+        }},
+        name='django.contrib.sitemaps.views.sitemap')
+
+    # Нехай щастить!
+    # url(r'^admin/', include(admin.site.urls)),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

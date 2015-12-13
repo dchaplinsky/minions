@@ -14,18 +14,23 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name" class="invisible">{{ minion.name }}</span>
+        <span itemprop="jobTitle" class="invisible">Помічник народного депутата</span>
+        <link itemprop="url" href="{{ url("minion_details", minion.id )}}" />
+
         <section class="main_content cf">
             <h3>Був помiчником у депутатiв</h3>
 
             <div class="block_wrap block_row cf">
                 {% for mp in minion.minion2mp2convocation_set.select_related("mp2convocation", "mp2convocation__mp") %}
-                    <div class="col-md-12">
+                    <div class="col-md-12"  itemscope itemtype="http://schema.org/Person" itemprop="knows">
                         <div class="col-md-4">
-                            <p><a href="{{ url("mp_details", mp.mp2convocation.mp.id) }}">{{ mp.mp2convocation.mp.name }}</a></p>
+                            <p><a href="{{ url("mp_details", mp.mp2convocation.mp.id) }}" itemprop="url"><span itemprop="name">{{ mp.mp2convocation.mp.name }}</span></a>
+                            <span itemprop="jobTitle" class="invisible">Депутат</span></p>
                         </div>
-                        <div class="col-md-4">
-                            <p>{{ mp.mp2convocation.party }}, <a href="{{ url("convocation", mp.mp2convocation.convocation_id) }}">{{ mp.mp2convocation.convocation_id }} скликання</a></p>
+                        <div class="col-md-4" itemscope itemtype="http://schema.org/Organization" itemprop="worksFor">
+                            <p><span itemprop="name">{{ mp.mp2convocation.party }}</span>, <a href="{{ url("convocation", mp.mp2convocation.convocation_id) }}">{{ mp.mp2convocation.convocation_id }} скликання</a></p>
                         </div>
                         <div class="col-md-4">
                             <span class="radius {% if mp.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}">{{ mp.paid }}</span>

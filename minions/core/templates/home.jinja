@@ -43,17 +43,24 @@
         </div>
         <div class="col-md-12 elem_blocks cf">
             {% for conv in convocations %}
-            <div class="posipaks_block cf">
-                <a href="{{ url("convocation", conv.number) }}">
+            <div class="posipaks_block cf" itemscope itemtype="http://schema.org/Organization">
+                <a href="{{ url("convocation", conv.number) }}" itemprop="url">
                     <div class="col-md-3 block_count_and_period f_left cf">
                         <div class="count f_left">
                             <p>{{ conv.number }}</p>
+                            <span itemprop="name" class="invisible">{{ conv.number }} слкикання Верховної Ради України</span>
+                            <span itemprop="address" class="invisible">вул. Михайла Грушевського, 5, Київ, 01008</span>
+                            <span itemscope itemtype="http://schema.org/Organization" itemprop="parentOrganization" class="invisible">
+                                <span itemprop="name">Верховна Рада України</span>
+                                <link itemprop="url" href="http://rada.gov.ua/" />
+                                <span itemprop="address">вул. Михайла Грушевського, 5, Київ, 01008</span>
+                            </span>
                         </div>
                         <div class="period f_left">
-                            <p>{% if conv.year_from %}{{ conv.year_from }}{% endif %}</p>
+                            <p itemprop="foundingDate">{% if conv.year_from %}{{ conv.year_from }}{% endif %}</p>
                             {% if conv.year_to %}
                             <p>-</p>
-                            <p>{{ conv.year_to }}</p>
+                            <p itemprop="dissolutionDate">{{ conv.year_to }}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -62,7 +69,7 @@
                             <p><span>{{ conv.num_minions }}</span> помічників у</p>
                         </div>
                         <div class="col-md-6 right_block f_left">
-                            <p><span>{{ conv.num_mps }}</span> нардепів</p>
+                            <p><span itemprop="numberOfEmployees">{{ conv.num_mps }}</span> нардепів</p>
                         </div>
                     </div>
                 </a>

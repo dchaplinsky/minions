@@ -26,7 +26,24 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container" itemscope itemtype="http://schema.org/Organization">
+    <span class="invisible">
+        <span itemprop="numberOfEmployees">{{ convocation.num_mps }}</span>
+        <span itemprop="name">{{ convocation.number }} слкикання Верховної Ради України</span>
+        <link itemprop="url" href="{{ url("convocation", convocation.number) }}" />
+        {% if convocation.year_from %}
+        <span itemprop="foundingDate">{{ convocation.year_from }}</span>
+        {% endif %}
+        {% if convocation.year_to %}
+        <span itemprop="dissolutionDate">{{ convocation.year_to }}</span>
+        {% endif %}
+        <span itemprop="address">вул. Михайла Грушевського, 5, Київ, 01008</span>
+        <span itemscope itemtype="http://schema.org/Organization" itemprop="parentOrganization">
+            <span itemprop="name">Верховна Рада України</span>
+            <link itemprop="url" href="http://rada.gov.ua/" />
+            <span itemprop="address">вул. Михайла Грушевського, 5, Київ, 01008</span>
+        </span>
+    </span>
     <section class="main_content cf">
 
         {#<ul class="list_abc_menu cf">
@@ -128,10 +145,10 @@
                 <span class="elem_anc_title">{{ letters.grouper }}</span>
                 {% for mp_by_letter in letters.list %}
                     {% set minions = mp_by_letter.minion2mp2convocation_set.select_related("minion").all() %}
-                    <div class="block_abc_1 panel panel-default">
+                    <div class="block_abc_1 panel panel-default" itemscope itemtype="http://schema.org/Person" itemprop="employee">
                         <div class="panel_block cf">
-                            <a href="{{ url("mp_details", mp_by_letter.mp.id )}}" class="link_person panel_title f_left">
-                                {{ mp_by_letter.mp.name }}
+                            <a href="{{ url("mp_details", mp_by_letter.mp.id )}}" class="link_person panel_title f_left" itemprop="url">
+                                <span itemprop="name">{{ mp_by_letter.mp.name }}</span><span itemprop="jobTitle" class="invisible">Депутат</span>
                             </a>
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ mp_by_letter.mp.id }}" class="button_acc collapsed f_right cf">
                                 <span class="f_right">{{ minions|length }}</span>
@@ -139,10 +156,11 @@
                         </div>
                         <div id="collapse{{ mp_by_letter.mp.id }}" class="panel-collapse collapse">
                             {% for minion in minions %}
-                            <div class="panel-body">
+                            <div class="panel-body" itemprop="knows" itemscope itemtype="http://schema.org/Person">
                                 <div class="col-md-12">
                                     <a href="{{ url("minion_details", minion.minion.id ) }}" class="link_nb">
-                                        <p>{{ minion.minion.name }}</p>
+                                        <p itemprop="name">{{ minion.minion.name }}</p>
+                                        <span itemprop="jobTitle" class="invisible">Помічник народного депутата</span>
                                         <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}">{{ minion.paid }}</span>
                                     </a>
                                 </div>

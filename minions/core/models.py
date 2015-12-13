@@ -11,6 +11,9 @@ class Convocation(models.Model):
     year_to = models.IntegerField("По", blank=True, null=True)
     img = models.ImageField(blank=True)
 
+    def get_absolute_url(self):
+        return reverse("convocation", kwargs={"convocation_id": self.pk})
+
     def __unicode__(self):
         return "%s скликання" % (self.number)
 
@@ -153,6 +156,9 @@ class Minion(models.Model):
         "MP2Convocation", verbose_name="Депутат",
         through=Minion2MP2Convocation)
     name = models.CharField("ПІБ", max_length=200, db_index=True)
+
+    def get_absolute_url(self):
+        return reverse("minion_details", kwargs={"minion_id": self.pk})
 
     class Meta:
         verbose_name = "Помічник"

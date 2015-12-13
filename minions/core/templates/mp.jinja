@@ -1,5 +1,4 @@
 {% extends "base.jinja" %}
-{# {% from "_results.jinja" import render_minions_table %} #}
 {% block title %}: {{ mp.name }}, помічники народного депутата України{% endblock%}
 
 {% block content %}
@@ -21,10 +20,12 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container" itemscope itemtype="http://schema.org/Person">
+    <span itemprop="name" class="invisible">{{ mp.name }}</span>
+    <span itemprop="jobTitle" class="invisible">Депутат</span>
+    <link itemprop="url" href="{{ url("mp_details", mp.id )}}" />
     <section class="main_content cf">
         <div class="tab_block">
-
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 {% for convocation in mp.mp2convocation_set.all() %}
@@ -36,9 +37,9 @@
             <div class="tab-content">
                 {% for convocation in mp.mp2convocation_set.all() %}
                 <div class="tab-pane{% if loop.first %} active{% endif %}" id="#conv_{{ convocation.convocation_id }}">
-                    <div class="top_block main_information cf">
+                    <div class="top_block main_information cf" itemscope itemtype="http://schema.org/Organization" itemprop="memberOf">
                         {% if convocation.party %}
-                        <p><span class="f_left">Партія</span>{{ convocation.party }}</p>
+                        <p itemprop="name"><span class="f_left">Партія</span> {{ convocation.party }}</p>
                         {% endif %}
 
                         {% if convocation.district %}
@@ -56,10 +57,11 @@
                         </div>
                         <div class="wrap_block cf">
                             {% for minion in minions %}
-                            <div class="panel-body">
+                            <div class="panel-body" itemprop="knows" itemscope itemtype="http://schema.org/Person">
                                 <div class="col-md-12">
-                                    <a href="{{ url("minion_details", minion.minion.id )}}" class="link_nb">
-                                        <p>{{ minion.minion.name }}</p>
+                                    <a href="{{ url("minion_details", minion.minion.id )}}" class="link_nb" itemprop="url">
+                                        <p itemprop="name">{{ minion.minion.name }}</p>
+                                        <span itemprop="jobTitle" class="invisible">Помічник народного депутата</span>
                                         <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}">{{ minion.paid }}</span>
                                     </a>
                                 </div>
