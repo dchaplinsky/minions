@@ -82,8 +82,9 @@ class DjangoPageRangePaginator(Paginator):
         return AbstractPage(*args, **kwargs)
 
 
-def paginated(request, search, klass=ElasticPageRangePaginator):
+def paginated(request, search, klass=ElasticPageRangePaginator,
+              cnt=settings.CATALOG_PER_PAGE):
     """Helper function that handles common pagination pattern."""
-    paginator = klass(search, settings.CATALOG_PER_PAGE)
+    paginator = klass(search, cnt)
     page = request.GET.get('page', 1)
     return paginator.page(page)

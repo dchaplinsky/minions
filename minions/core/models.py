@@ -32,6 +32,18 @@ class MP2Convocation(models.Model):
     mp = models.ForeignKey("MemberOfParliament")
     convocation = models.ForeignKey("Convocation")
 
+    def to_dict(self):
+        m = model_to_dict(self, fields=[
+            "party", "district", "date_from", "date_to"])
+
+        m["convocation"] = self.convocation_id
+        m["name"] = self.mp.name
+        m["link"] = self.mp.link
+        m["id"] = self.mp.id
+        m["grouper"] = "%s %s" % (self.convocation_id, self.mp.name)
+
+        return m
+
     def __unicode__(self):
         return "%s, депутат %s скликання" % (self.mp.name, self.convocation_id)
 
@@ -57,14 +69,6 @@ class MemberOfParliament(models.Model):
 
     def get_absolute_url(self):
         return reverse("mp_details", kwargs={"mp_id": self.pk})
-
-    def to_dict(self):
-        """
-        Convert Minion model to an indexable presentation for ES.
-        """
-        return model_to_dict(self, fields=[
-            "id", "convocation", "name", "party", "link", "district",
-            "date_from", "date_to"])
 
     class Meta:
         verbose_name = "Депутат"
@@ -108,9 +112,9 @@ class Minion2MP2Convocation(models.Model):
         """
         Convert Minion model to an indexable presentation for ES.
         """
-        d = model_to_dict(self, fields=["id", "paid"])
+        d = model_to_dict(self, fields=["paid"])
 
-        # d["mp"] = self.mp.to_dict()
+        d["mp"] = self.mp2convocation.to_dict()
 
         def generate_suggestions(last_name, first_name, patronymic):
             if not last_name:
@@ -133,16 +137,11 @@ class Minion2MP2Convocation(models.Model):
             "output": self.mp2convocation.mp.name
         }
 
-        d["_id"] = d["id"]
+        d["_id"] = self.id
+        d["id"] = self.minion.id
         d["name"] = self.minion.name
 
         return d
-
-    # def __unicode__(self):
-    #     return "%s, депутат %s скликання" % (self.mp.name, self.convocation_id)
-
-    # def __str__(self):
-    #     return self.__unicode__()
 
     class Meta:
         verbose_name = "Належність помічника до депутата"

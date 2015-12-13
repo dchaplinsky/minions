@@ -1,6 +1,6 @@
 {% extends "base.jinja" %}
-{% from "_results.jinja" import render_minions with context %}
 
+{% from "_pagination.jinja" import render_pagination with context %}
 {% block title %}: результати пошуку{% endblock%}
 
 {% block content %}
@@ -15,9 +15,40 @@
             </h2>
         </div><!-- /.col-lg-4 -->
     </div><!-- /.row -->
+    
+    <div class="container">
+        <section class="main_content cf">
+        {% for mp in minions|groupby('mp.grouper') %}
+            <div id="block_abc_1" class="block_wrap panel-group">
+                <div class="block_abc_1 panel panel-default">
+                    <div class="panel_block cf">
+                        <a href="{{ url("mp_details", mp.list[0].mp.id )}}" class="link_person panel_title f_left">
+                            {{ mp.list[0].mp.name }}, {{ mp.list[0].mp.convocation }} скликання
+                        </a>
+                    </div>
+                    <div class="panel-collapse">
+                        {% for minion in mp.list %}
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <a href="{{ url("minion_details", minion.id ) }}" class="link_nb">
+                                    <p>{{ minion.name }}</p>
+                                    <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}">{{ minion.paid }}</span>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
 
-
-    <div class="row">
-        {{ render_minions(minions) }}
-    </div><!-- /.row -->
+        {% if minions.paginator.num_pages > 1 %}
+        <div class="text-center">
+            <nav>
+            {{ render_pagination(minions, "") }}
+            </nav>
+        </div>
+        {% endif %}
+        </section>
+    </div>
 {% endblock %}
