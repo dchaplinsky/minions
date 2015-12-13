@@ -15,8 +15,8 @@
     </div>
 
     <div class="container" itemscope itemtype="http://schema.org/Person">
-        <span itemprop="name" class="invisible">{{ minion.name }}</span>
-        <span itemprop="jobTitle" class="invisible">Помічник народного депутата</span>
+        <span itemprop="name" class="hide">{{ minion.name }}</span>
+        <span itemprop="jobTitle" class="hide">Помічник народного депутата</span>
         <link itemprop="url" href="{{ url("minion_details", minion.id )}}" />
 
         <section class="main_content cf">
@@ -27,7 +27,7 @@
                     <div class="col-md-12"  itemscope itemtype="http://schema.org/Person" itemprop="knows">
                         <div class="col-md-4">
                             <p><a href="{{ url("mp_details", mp.mp2convocation.mp.id) }}" itemprop="url"><span itemprop="name">{{ mp.mp2convocation.mp.name }}</span></a>
-                            <span itemprop="jobTitle" class="invisible">Депутат</span></p>
+                            <span itemprop="jobTitle" class="hide">Депутат</span></p>
                         </div>
                         <div class="col-md-4" itemscope itemtype="http://schema.org/Organization" itemprop="worksFor">
                             <p><span itemprop="name">{{ mp.mp2convocation.party }}</span>, <a href="{{ url("convocation", mp.mp2convocation.convocation_id) }}">{{ mp.mp2convocation.convocation_id }} скликання</a></p>

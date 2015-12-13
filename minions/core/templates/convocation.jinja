@@ -27,7 +27,7 @@
 </div>
 
 <div class="container" itemscope itemtype="http://schema.org/Organization">
-    <span class="invisible">
+    <span class="hide">
         <span itemprop="numberOfEmployees">{{ convocation.num_mps }}</span>
         <span itemprop="name">{{ convocation.number }} слкикання Верховної Ради України</span>
         <link itemprop="url" href="{{ url("convocation", convocation.number) }}" />
@@ -148,7 +148,7 @@
                     <div class="block_abc_1 panel panel-default" itemscope itemtype="http://schema.org/Person" itemprop="employee">
                         <div class="panel_block cf">
                             <a href="{{ url("mp_details", mp_by_letter.mp.id )}}" class="link_person panel_title f_left" itemprop="url">
-                                <span itemprop="name">{{ mp_by_letter.mp.name }}</span><span itemprop="jobTitle" class="invisible">Депутат</span>
+                                <span itemprop="name">{{ mp_by_letter.mp.name }}</span><span itemprop="jobTitle" class="hide">Депутат</span>
                             </a>
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ mp_by_letter.mp.id }}" class="button_acc collapsed f_right cf">
                                 <span class="f_right">{{ minions|length }}</span>
@@ -160,7 +160,7 @@
                                 <div class="col-md-12">
                                     <a href="{{ url("minion_details", minion.minion.id ) }}" class="link_nb">
                                         <p itemprop="name">{{ minion.minion.name }}</p>
-                                        <span itemprop="jobTitle" class="invisible">Помічник народного депутата</span>
+                                        <span itemprop="jobTitle" class="hide">Помічник народного депутата</span>
                                         <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}">{{ minion.paid }}</span>
                                     </a>
                                 </div>
