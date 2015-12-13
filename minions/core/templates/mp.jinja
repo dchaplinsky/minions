@@ -36,7 +36,7 @@
             <!-- Tab panes -->
             <div class="tab-content">
                 {% for convocation in mp.mp2convocation_set.all() %}
-                <div class="tab-pane{% if loop.first %} active{% endif %}" id="#conv_{{ convocation.convocation_id }}">
+                <div class="tab-pane{% if loop.first %} active{% endif %}" id="conv_{{ convocation.convocation_id }}">
                     <div class="top_block main_information cf" itemscope itemtype="http://schema.org/Organization" itemprop="memberOf">
                         {% if convocation.party %}
                         <p itemprop="name"><span class="f_left">Партія</span> {{ convocation.party }}</p>
