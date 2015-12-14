@@ -2,8 +2,9 @@
 {% from "_pagination.jinja" import render_pagination with context %}
 {% block title %}: {{ convocation.number }} скликання Верховної Ради України{% endblock%}
 
-{% block content %}
+{% block body_class %}list_abc{% endblock %}
 
+{% block content %}
 <div class="block_main_info">
     <div class="header_container">
         <div class="row block_header cf">
