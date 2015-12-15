@@ -253,6 +253,7 @@
         font-size: 18px;
         line-height: 20px;
         margin: 10px 0 0;
+        min-width: 30px;
     }
 
     .panel-collapse {
@@ -280,7 +281,7 @@
         height: 60px;
         margin: 0 auto;
         position: relative;
-        width: 290px;
+        width: 100%;
     }
 
     .logo img {
@@ -289,10 +290,6 @@
 
     .block_logo {
         padding: 60px 0 30px 0;
-    }
-
-    .block_logo .form_search {
-        right: auto;
     }
 
     .input_search {
@@ -304,9 +301,9 @@
     }
 
     .count p {
-        font-size: 39px;
-        line-height: 16px;
-        margin-top: 27px;
+        font-size: 32px;
+        line-height: 34px;
+        margin-top: 17px;
     }
 
     .container .block_count_and_period {
@@ -315,7 +312,7 @@
 
     .container .period {
         border-left: 1px solid #ffffff;
-        height: 73px;
+        height: 67px;
         margin-left: 12px;
         margin-top: 1px;
         padding-left: 8px;
@@ -323,25 +320,26 @@
     }
 
     .helpers span {
-        font-size: 22px;
-        line-height: 24px;
+        font-size: 16px;
+        line-height: 18px;
     }
 
     .helpers p {
-        font-size: 18px;
+        font-size: 14px;
         line-height: 20px;
     }
 
-    .container .helpers {
-        padding: 27px 10px 27px 6px;
+    .period p {
+        font-size: 12px;
+        line-height: 14px;
     }
 
     .container .block_count_and_period {
-        padding: 12px 0 10px 15px;
+        padding: 12px 0 10px 10px;
     }
 
     .container .helpers {
-        padding: 24px 10px 24px 6px;
+        padding: 25px 10px 25px 6px;
     }
 
     .main_content .test_block {
@@ -350,6 +348,7 @@
 
     /*---------------------------------*/
     .block_logo .form_search {
+        right: 20px;
         top: -45px;
     }
 
@@ -394,7 +393,6 @@
 
     .button_acc span {
         font-size: 18px;
-        min-width: 30px;
         line-height: 20px;
         margin: 0;
         position: relative;
@@ -407,5 +405,49 @@
 
     .button_acc.f_right.cf {
         margin-top: 14px;
+    }
+
+    .link_nb .radius {
+        position: relative;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 10px;
+    }
+
+    .link_person.panel_title.f_left {
+        padding: 10px;
+        width: 195px;
+    }
+
+    .posipak .main_content {
+        padding: 15px 25px 15px 15px;
+    }
+
+    .posipak .block_row p {
+        font-size: 15px;
+        line-height: 17px;
+        margin-bottom: 5px;
+    }
+
+    .posipak .circle {
+        right: -19px;
+        top: 3px;
+    }
+
+    .main_information p {
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    .error_404 .input_wrap.cf {
+        width: 238px;
+    }
+
+    .error_404 .input_search {
+        width: 189px;
+    }
+
+    .posipak_detail .link_nb:hover {
+        text-decoration: none;
     }
 }
