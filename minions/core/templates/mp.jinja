@@ -63,7 +63,7 @@
                                     <a href="{{ url("minion_details", minion.minion.id )}}" class="link_nb" itemprop="url">
                                         <p itemprop="name">{{ minion.minion.name }}</p>
                                         <span itemprop="jobTitle" class="hide">Помічник народного депутата</span>
-                                        <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}">{{ minion.paid }}</span>
+                                        <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}" title="{{ minion.paid }}">{{ minion.paid|truncate(25) }}</span>
                                     </a>
                                 </div>
                             </div>

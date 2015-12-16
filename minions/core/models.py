@@ -112,7 +112,7 @@ def parse_fullname(person_name):
 class Minion2MP2Convocation(models.Model):
     mp2convocation = models.ForeignKey("MP2Convocation")
     minion = models.ForeignKey("Minion")
-    paid = models.CharField("Засади", max_length=200)
+    paid = models.CharField("Засади", max_length=200, db_index=True)
 
     def to_dict(self):
         """

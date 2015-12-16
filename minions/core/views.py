@@ -111,7 +111,7 @@ def search(request):
         persons = ElasticMinion.search().query('match_all')
 
     return render(request, "search.jinja", {
-        "minions": paginated(request, persons.sort('mp.grouper'), cnt=30),
+        "minions": paginated(request, persons.sort('mp.grouper', '-paid', 'name'), cnt=30),
         "q": query
     })
 
