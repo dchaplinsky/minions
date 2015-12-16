@@ -51,7 +51,7 @@
                         <p><span class="f_left">Період</span>{% if convocation.date_from|date %}з {{ convocation.date_from }}{% endif %} {% if convocation.date_to %}по {{ convocation.date_to }}{% endif %}</p>
                         {% endif %}
                     </div>
-                    {% set minions = convocation.minion2mp2convocation_set.select_related("minion").all() %}
+                    {% set minions = convocation.minion2mp2convocation_set.select_related("minion").order_by("-paid", "minion__name").all() %}
                     <div class="bottom_block list_persons cf">
                         <div class="person_count">
                             <p>{{ minions|length }} помiчникiв</p>
