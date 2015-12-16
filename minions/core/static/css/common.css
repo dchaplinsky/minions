@@ -185,6 +185,11 @@ body {
     margin-bottom: 50px;
 }
 
+.block_header .text_content small {
+    color: white;
+    font-size: 12px;
+}
+
 /*--------------------------------------------------- End Header ------------------------------------------------------*/
 /*-------------------------------------------------- Main content -----------------------------------------------------*/
 .main_content {
@@ -679,6 +684,27 @@ body {
     border-color: transparent transparent #e2e2e2;
     border-style: solid;
     border-width: 0 13px 11px 9px;
+}
+
+.copyright a {
+    display: inline-block;
+    margin: 30px;
+    height: 49px;
+}
+
+#logo-slidstvo {
+    width: 229px;
+    background: url("../images/slid.png") center center no-repeat;
+}
+
+#logo-kanc {
+    width: 42px;
+    background: url("../images/kanc.png") center center no-repeat;
+}
+
+#logo-hromadske {
+    width: 241px;
+    background: url("../images/hrom.png") center center no-repeat;
 }
 
 /*----------------------------------------------- End Main content ----------------------------------------------------*/

@@ -63,6 +63,9 @@ class MemberOfParliament(models.Model):
         "Convocation", verbose_name="Скликання", through="MP2Convocation")
     name = models.CharField("ПІБ", max_length=200, db_index=True)
     link = models.URLField("Посилання", max_length=512, blank=True)
+    img = models.ImageField(blank=True)
+    img_retrieved = models.BooleanField(default=False, db_index=True)
+
 
     def __unicode__(self):
         return "Нардеп %s" % (self.name)
