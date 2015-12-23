@@ -16,6 +16,12 @@
                     <a class="find_viki" href="{{ mp.link }}" target="_blank">Читати докладніше на Вікіпедії</a>
                 </div>
                 {% endif %}
+
+                {% if mp.img %}
+                <div class="icon_person">
+                    <img alt="{{ mp.name }}" src="{{ mp.img|thumbnail_url("avatar") }}" class="img-circle" />
+                </div>    
+                {% endif %}         
             </div>
         </div>
     </div>
@@ -25,6 +31,9 @@
     <span itemprop="name" class="hide">{{ mp.name }}</span>
     <span itemprop="jobTitle" class="hide">Депутат</span>
     <link itemprop="url" href="{{ url("mp_details", mp.id )}}" />
+    {% if mp.img %}
+    <link itemprop="image" href="{{ mp.img }}" />
+    {% endif %}
     <section class="main_content cf">
         <div class="tab_block">
             <!-- Nav tabs -->
@@ -49,6 +58,10 @@
 
                         {% if convocation.date_from or convocation.date_to %}
                         <p><span class="f_left">Період</span>{% if convocation.date_from|date %}з {{ convocation.date_from }}{% endif %} {% if convocation.date_to %}по {{ convocation.date_to }}{% endif %}</p>
+                        {% endif %}
+
+                        {% if convocation.link %}
+                        <p><span class="f_left">Інфо</span><a href="{{ convocation.link }}" target="_blank">сторінка на сайті ВР</a></p>
                         {% endif %}
                     </div>
                     {% set minions = convocation.minion2mp2convocation_set.select_related("minion").order_by("-paid", "minion__name").all() %}

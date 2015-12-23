@@ -3,6 +3,11 @@
 {% from "_pagination.jinja" import render_pagination with context %}
 {% block title %}: результати пошуку{% endblock%}
 
+{% block extrahead %}
+    {% if minions.has_previous() %}<link rel="prev" href="?{{ updated_querystring(request, {'page': minions.previous_page_number()}) }}" />{% endif %}
+    {% if minions.has_next() %}<link rel="next" href="?{{ updated_querystring(request, {'page': minions.next_page_number()}) }}" />{% endif %}
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-lg-12">

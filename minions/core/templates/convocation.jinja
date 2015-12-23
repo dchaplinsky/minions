@@ -3,6 +3,11 @@
 {% block title %}: {{ convocation.number }} скликання Верховної Ради України{% endblock%}
 
 {% block body_class %}list_abc{% endblock %}
+{% block extrahead %}
+    {% if mps.has_previous() %}<link rel="prev" href="?{{ updated_querystring(request, {'page': mps.previous_page_number()}) }}" />{% endif %}
+    {% if mps.has_next() %}<link rel="next" href="?{{ updated_querystring(request, {'page': mps.next_page_number()}) }}" />{% endif %}
+{% endblock %}
+
 
 {% block content %}
 <div class="block_main_info">

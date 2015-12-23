@@ -618,6 +618,15 @@ body {
     display: block;
 }
 
+.main_information p a {
+    color: white;
+    text-decoration: underline;
+}
+
+.main_information p a:hover {
+    text-decoration: none;
+}
+
 .main_information {
     background: #d8d8d8 none repeat scroll 0 0;
     padding: 34px 25px;

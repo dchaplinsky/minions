@@ -38,6 +38,9 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="{{ static("icons/ms-icon-144x144.png") }}">
         <meta name="theme-color" content="#ffffff">
+
+        {% block extrahead %}
+        {% endblock %}
     </head>
 
     <body class="{% block body_class %}home_page{% endblock %}">

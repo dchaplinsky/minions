@@ -38,6 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django_jinja',
+    'django_jinja.contrib._easy_thumbnails',
+    'easy_thumbnails',
     'core',
 )
 
@@ -155,6 +157,13 @@ TEMPLATES = [
         "APP_DIRS": True
     },
 ]
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (179, 179), 'crop': ",0", 'upscale': True},
+    },
+}
+
 
 CATALOG_PER_PAGE = 10
 

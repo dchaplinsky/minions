@@ -31,6 +31,7 @@ class MP2Convocation(models.Model):
 
     date_from = models.DateField(blank=True)
     date_to = models.DateField(blank=True)
+    link = models.URLField("Посилання", max_length=512, blank=True)
 
     mp = models.ForeignKey("MemberOfParliament")
     convocation = models.ForeignKey("Convocation")
