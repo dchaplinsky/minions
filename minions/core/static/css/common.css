@@ -462,6 +462,17 @@ body {
     color: rgba(0, 0, 0, 0.5);
 }
 
+.list_abc_menu .item a.current {
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.list_abc_menu .item span {
+    font-size: 22px;
+    line-height: 24px;
+    color: rgba(0, 0, 0, 0.2);
+}
+
 .list_abc_menu {
     display: inline-block;
     margin-bottom: 45px;

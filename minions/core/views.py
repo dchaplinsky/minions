@@ -1,4 +1,5 @@
 from operator import itemgetter
+from collections import Counter
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count
@@ -89,12 +90,26 @@ def convocation(request, convocation_id):
         num_minions=Count('mp2convocation__minion')),
         number=int(convocation_id))
 
+    letter = request.GET.get("letter", False)[0]
+
     mps = MP2Convocation.objects.select_related("mp").filter(
         convocation=conv).order_by("mp__name").extra(
         select={'first_letter': "SUBSTR(core_memberofparliament.name, 1, 1)"})
 
+    alphabet = MP2Convocation.objects.select_related("mp").filter(
+        convocation=conv).order_by("mp__name").extra(
+            select={
+                'first_letter': "SUBSTR(core_memberofparliament.name, 1, 1)"
+            }
+        ).values_list('first_letter', flat=True)
+
+    if letter and letter in alphabet:
+        mps = mps.filter(mp__name__startswith=letter)
+
     return render(request, "convocation.jinja", {
         "convocation": conv,
+        "alphabet": Counter(map(str.upper, alphabet)),
+        "current_letter": letter,
         "mps": paginated(request, mps, DjangoPageRangePaginator),
     })
 
@@ -111,7 +126,8 @@ def search(request):
         persons = ElasticMinion.search().query('match_all')
 
     return render(request, "search.jinja", {
-        "minions": paginated(request, persons.sort('mp.grouper', '-paid', 'name'), cnt=30),
+        "minions": paginated(
+            request, persons.sort('mp.grouper', '-paid', 'name'), cnt=30),
         "q": query
     })
 

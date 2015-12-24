@@ -51,100 +51,17 @@
         </span>
     </span>
     <section class="main_content cf">
-
-        {#<ul class="list_abc_menu cf">
+        <ul class="list_abc_menu cf">
+        {% for letter in "АБВГДЄЖЗИІЇКЛМНОПРСТУФХЦЧШЩЮЯ" %}
             <li class="item f_left">
-                <a href="#block_abc_1">А</a>
+            {% if letter in alphabet %}
+                <a href="?letter={{ letter }}" title="{{ alphabet[letter] }} депутатів" {% if letter == current_letter %}class="current"{% endif %}>{{ letter }}</a>
+            {% else %}
+                <span>{{ letter }}</span>
+            {% endif %}
             </li>
-            <li class="item f_left">
-                <a href="#block_abc_2">Б</a>
-            </li>
-            <li class="item f_left">
-                <a href="#block_abc_3">В</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Г</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Д</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Е</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Є</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Ж</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">З</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">И</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">І</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Ї</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">К</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Л</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">М</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Н</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">О</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">П</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Р</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">С</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Т</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">У</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Ф</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Х</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Ц</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Ч</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Ш</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Щ</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Ю</a>
-            </li>
-            <li class="item f_left">
-                <a href="#">Я</a>
-            </li>
+        {% endfor %}
         </ul>
-        #}
 
         {% for letters in mps|groupby('first_letter') %}
             <div id="block_abc_1" class="block_wrap panel-group">
