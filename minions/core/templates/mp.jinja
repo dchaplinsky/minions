@@ -38,14 +38,14 @@
         <div class="tab_block">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
-                {% for convocation in mp.mp2convocation_set.all() %}
+                {% for convocation in mp.mp2convocation_set.order_by("convocation_id").all() %}
                     <li {% if loop.first %}class="active"{% endif %}><a href="#conv_{{ convocation.convocation_id }}" data-toggle="tab">{{ convocation.convocation_id }} скликання</a></li>
                 {% endfor %}
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
-                {% for convocation in mp.mp2convocation_set.all() %}
+                {% for convocation in mp.mp2convocation_set.order_by("convocation_id").all() %}
                 <div class="tab-pane{% if loop.first %} active{% endif %}" id="conv_{{ convocation.convocation_id }}">
                     <div class="top_block main_information cf" itemscope itemtype="http://schema.org/Organization" itemprop="memberOf">
                         {% if convocation.party %}
