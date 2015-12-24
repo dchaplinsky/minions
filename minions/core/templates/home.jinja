@@ -37,7 +37,7 @@
                 <h1>Посіпаки за скликаннями</h1>
             </div>
             <div class="test_block">
-                <p>Усьго вiдомо про {{ count_of_minions }} посiпак</p>
+                <p>Усьго вiдомо про {{ count_of_minions }} посiпак{{ count_of_minions|ua_pluralize("у") }}</p>
             </div>
         </div>
         <div class="col-md-12 elem_blocks cf">
@@ -65,10 +65,10 @@
                     </div>
                     <div class="col-md-9 helpers f_left cf">
                         <div class="col-md-6 left_block f_left">
-                            <p><span>{{ conv.num_minions }}</span> помічників у</p>
+                            <p><span>{{ conv.num_minions }}</span> помічник{{ conv.num_minions|ua_pluralize("а", "и", "ів", "ів") }} у</p>
                         </div>
                         <div class="col-md-6 right_block f_left">
-                            <p><span itemprop="numberOfEmployees">{{ conv.num_mps }}</span> депутатів</p>
+                            <p><span itemprop="numberOfEmployees">{{ conv.num_mps }}</span> депутат{{ conv.num_mps|ua_pluralize("а", "ів", "ів", "ів") }}</p>
                         </div>
                     </div>
                 </a>
