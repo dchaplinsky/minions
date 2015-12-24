@@ -90,7 +90,7 @@ def convocation(request, convocation_id):
         num_minions=Count('mp2convocation__minion')),
         number=int(convocation_id))
 
-    letter = request.GET.get("letter", False)[0]
+    letter = request.GET.get("letter", False)
 
     mps = MP2Convocation.objects.select_related("mp").filter(
         convocation=conv).order_by("mp__name").extra(
@@ -103,7 +103,10 @@ def convocation(request, convocation_id):
             }
         ).values_list('first_letter', flat=True)
 
-    if letter and letter in alphabet:
+    if letter not in alphabet:
+        letter = False
+
+    if letter:
         mps = mps.filter(mp__name__startswith=letter)
 
     return render(request, "convocation.jinja", {
