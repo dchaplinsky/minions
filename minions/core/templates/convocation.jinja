@@ -8,6 +8,19 @@
     {% if mps.has_next() %}<link rel="next" href="?{{ updated_querystring(request, {'page': mps.next_page_number()}) }}" />{% endif %}
 {% endblock %}
 
+{% block meta_description -%}
+    {% if convocation.number == 8 -%}
+    Відкрита база даних про помічників народних депутатів 8-го скликання Верховної Ради України. Цікаві дані та детальніша інформація на сайті посіпак.
+    {%- elif convocation.number == 7 -%}
+    Відкрита база даних про {{ convocation.num_minions }} помічників у {{ convocation.num_mps }} народних депутатів під час 7-го скликання Верховної Ради України. Детальніша інформація на сайті посіпак.
+    {%- elif convocation.number == 6 -%}
+    Відкрита база даних про {{ convocation.num_minions }} помічників у {{ convocation.num_mps }} народних депутатів під час 6-го скликання Верховної Ради України. Детальніша інформація на сайті посіпак.
+    {%- elif convocation.number == 5 -%}
+    Відкрита база даних про помічників народних депутатів 5-го скликання Верховної Ради України. Цікаві дані та детальніша інформація на сайті посіпак.
+    {%- elif convocation.number == 4 -%}
+    Відкрита база даних про {{ convocation.num_minions }} помічників у {{ convocation.num_mps }} народних депутатів під час 4-го скликання Верховної Ради України. Детальніша інформація на сайті посіпак.
+    {%- endif %}
+{%- endblock %}
 
 {% block content %}
 <div class="block_main_info">
