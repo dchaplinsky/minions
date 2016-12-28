@@ -30,7 +30,7 @@ class MP2Convocation(models.Model):
     district = models.CharField("Округ", max_length=200, blank=True)
 
     date_from = models.DateField(blank=True)
-    date_to = models.DateField(blank=True)
+    date_to = models.DateField(blank=True, null=True)
     link = models.URLField("Посилання", max_length=512, blank=True)
 
     mp = models.ForeignKey("MemberOfParliament")

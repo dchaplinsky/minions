@@ -17,9 +17,10 @@ class Command(BaseCommand):
         mps = {}
         mp_cnt = 0
         minions_cnt = 0
+        links_cnt = 0
 
-        MP2Convocation.objects.filter(
-            convocation=options["convocation"]).delete()
+        # MP2Convocation.objects.filter(
+        #     convocation=options["convocation"]).delete()
 
         fname = "core/data/rada%s.tsv" % options["convocation"]
 
@@ -41,7 +42,7 @@ class Command(BaseCommand):
                     "party": row[1],
                     "district": row[2],
                     "date_from": dt_parse(row[3][:10], dayfirst=True),
-                    "date_to": dt_parse(row[4][:10], dayfirst=True),
+                    "date_to": dt_parse(row[4][:10], dayfirst=True) if row[4][:10] else None,
                     "link": row[5] if "redlink=1" not in row[5] else "",
                 }
 
@@ -64,38 +65,54 @@ class Command(BaseCommand):
                         raise CommandError(
                             "Information on %s is not found" % row[0])
 
-                    mp, _ = MemberOfParliament.objects.get_or_create(
-                        name__iexact=row[0], defaults={
-                            "link": dep_data["link"],
-                            "name": row[0]
-                        })
+                    try:
+                        mp, created = MemberOfParliament.objects.get_or_create(
+                            name__iexact=row[0], defaults={
+                                "link": dep_data["link"],
+                                "name": row[0]
+                            })
+                    except MemberOfParliament.MultipleObjectsReturned:
+                        mp, created = MemberOfParliament.objects.get_or_create(
+                            name__iexact=row[0],
+                            link=dep_data["link"],
+                            defaults={
+                                "link": dep_data["link"],
+                                "name": row[0]
+                            })
 
-                    dep = MP2Convocation.objects.create(
+                    dep, link_created = MP2Convocation.objects.update_or_create(
                         convocation=conv, mp=mp,
                         party=dep_data["party"],
                         district=dep_data["district"],
                         date_from=dep_data["date_from"],
-                        date_to=dep_data["date_to"]
+                        defaults={
+                            "date_to": dep_data["date_to"]
+                        }
                     )
 
-                    mp_cnt += 1
+                    if created:
+                        mp_cnt += 1
+
+                    if link_created:
+                        links_cnt += 1
                 else:
                     if dep is None:
                         raise CommandError(
                             "Minion %s without MP!" % row[1])
 
-                    minion, _ = Minion.objects.get_or_create(
+                    minion, created = Minion.objects.get_or_create(
                         name__iexact=row[1], defaults={
                             "name": row[1]
                         })
 
-                    Minion2MP2Convocation.objects.create(
+                    Minion2MP2Convocation.objects.get_or_create(
                         mp2convocation=dep,
                         minion=minion,
                         paid=row[3]
                     )
 
-                    minions_cnt += 1
+                    if created:
+                        minions_cnt += 1
 
-            print("%s MPs and %s minions has been created" % (
-                mp_cnt, minions_cnt))
+            print("%s MPs, %s links and %s minions has been created" % (
+                mp_cnt, links_cnt, minions_cnt))
