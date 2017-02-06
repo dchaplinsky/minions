@@ -5,16 +5,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from core.models import Convocation, MemberOfParliament, Minion
+from core import views as core_views
 
 urlpatterns = [
-    url(r'^ajax/suggest$', 'core.views.suggest', name='suggest'),
-    url(r'^$', 'core.views.home', name='home'),
-    url(r'^search$', 'core.views.search', name='search'),
-    url(r'^mp/(?P<mp_id>\d+)$', 'core.views.mp_details',
+    url(r'^ajax/suggest$', core_views.suggest, name='suggest'),
+    url(r'^$', core_views.home, name='home'),
+    url(r'^search$', core_views.search, name='search'),
+    url(r'^mp/(?P<mp_id>\d+)$', core_views.mp_details,
         name='mp_details'),
-    url(r'^minion/(?P<minion_id>\d+)$', 'core.views.minion_details',
+    url(r'^minion/(?P<minion_id>\d+)$', core_views.minion_details,
         name='minion_details'),
-    url(r'^convocation/(?P<convocation_id>\d+)$', 'core.views.convocation',
+    url(r'^convocation/(?P<convocation_id>\d+)$', core_views.convocation,
         name='convocation'),
 
     url(r'^sitemap\.xml$', sitemap, {
@@ -40,4 +41,4 @@ urlpatterns = [
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = "core.views.handler404"
+handler404 = core_views.handler404
