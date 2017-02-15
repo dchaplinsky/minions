@@ -11,11 +11,25 @@ from core.models import (
 from core.paginator import paginated, DjangoPageRangePaginator
 
 
+def unique(source):
+    """
+    Returns unique values from the list preserving order of initial list.
+    :param source: An iterable.
+    :type source: list
+    :returns: List with unique values.
+    :rtype: list
+    """
+    seen = set()
+    return [seen.add(x) or x for x in source if x not in seen]
+
+
 def suggest(request):
     def assume(q, fuzziness):
         results = []
 
         search = ElasticMinion.search()\
+            .source(['name_suggest', 'name'])\
+            .params(size=0)\
             .suggest(
                 'name',
                 q,
@@ -24,7 +38,7 @@ def suggest(request):
                     'size': 10,
                     'fuzzy': {
                         'fuzziness': fuzziness,
-                        'unicode_aware': 1
+                        'unicode_aware': True
                     }
                 }
         )
@@ -34,6 +48,8 @@ def suggest(request):
             results += res.suggest['name'][0]['options']
 
         search = ElasticMinion.search()\
+            .source(['mp_name_suggest', 'mp.name'])\
+            .params(size=0)\
             .suggest(
                 'name',
                 q,
@@ -42,7 +58,7 @@ def suggest(request):
                     'size': 10,
                     'fuzzy': {
                         'fuzziness': fuzziness,
-                        'unicode_aware': 1
+                        'unicode_aware': True
                     }
                 }
         )
@@ -51,12 +67,16 @@ def suggest(request):
         if res.success:
             results += res.suggest['name'][0]['options']
 
-        results = sorted(results, key=itemgetter("score"), reverse=True)
+        results = sorted(results, key=itemgetter("_score"), reverse=True)
 
         if results:
-            return [val['text'] for val in results]
+            return unique(
+                val._source.name
+                if "name" in val._source else val._source.mp.name
+                for val in results
+            )
         else:
-            []
+            return []
 
     q = request.GET.get('q', '').strip()
 
@@ -130,7 +150,7 @@ def search(request):
 
     return render(request, "search.jinja", {
         "minions": paginated(
-            request, persons.sort('mp.grouper', '-paid', 'name'), cnt=30),
+            request, persons.sort('mp.grouper', '-paid', 'name.raw'), cnt=30),
         "q": query
     })
 

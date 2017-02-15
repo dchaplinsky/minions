@@ -134,14 +134,12 @@ class Minion2MP2Convocation(models.Model):
             ]
 
         d["name_suggest"] = {
-            "input": generate_suggestions(*parse_fullname(self.minion.name)),
-            "output": self.minion.name
+            "input": generate_suggestions(*parse_fullname(self.minion.name))
         }
 
         d["mp_name_suggest"] = {
             "input": generate_suggestions(
-                *parse_fullname(self.mp2convocation.mp.name)),
-            "output": self.mp2convocation.mp.name
+                *parse_fullname(self.mp2convocation.mp.name))
         }
 
         d["_id"] = self.id
