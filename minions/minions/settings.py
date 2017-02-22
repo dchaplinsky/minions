@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django_jinja.contrib._easy_thumbnails',
     'easy_thumbnails',
     'core',
+    'raven.contrib.django.raven_compat',
 )
 
 MIDDLEWARE_CLASSES = (
