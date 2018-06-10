@@ -33,12 +33,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='minion2mp2convocation',
             name='minion',
-            field=models.ForeignKey(to='core.Minion'),
+            field=models.ForeignKey(to='core.Minion', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='minion2mp2convocation',
             name='mp2convocation',
-            field=models.ForeignKey(to='core.MP2Convocation'),
+            field=models.ForeignKey(to='core.MP2Convocation', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='minion',

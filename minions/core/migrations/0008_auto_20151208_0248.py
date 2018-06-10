@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='minion',
             name='mp',
-            field=models.ForeignKey(verbose_name='Депутат', to='core.MP2Convocation'),
+            field=models.ForeignKey(verbose_name='Депутат', to='core.MP2Convocation', on_delete=models.CASCADE),
         ),
     ]

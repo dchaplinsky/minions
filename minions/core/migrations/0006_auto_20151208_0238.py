@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('district', models.CharField(blank=True, verbose_name='Округ', max_length=200)),
                 ('date_from', models.DateField(blank=True)),
                 ('date_to', models.DateField(blank=True)),
-                ('convocation', models.ForeignKey(to='core.Convocation')),
+                ('convocation', models.ForeignKey(to='core.Convocation', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name_plural': 'Належності до скликання',
@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='mp2convocation',
             name='mp',
-            field=models.ForeignKey(to='core.MemberOfParliament'),
+            field=models.ForeignKey(to='core.MemberOfParliament', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='memberofparliament',

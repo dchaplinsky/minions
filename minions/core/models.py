@@ -1,7 +1,7 @@
 import re
 from string import capwords
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms.models import model_to_dict
 
 
@@ -33,8 +33,8 @@ class MP2Convocation(models.Model):
     date_to = models.DateField(blank=True, null=True)
     link = models.URLField("Посилання", max_length=512, blank=True)
 
-    mp = models.ForeignKey("MemberOfParliament")
-    convocation = models.ForeignKey("Convocation")
+    mp = models.ForeignKey("MemberOfParliament", on_delete=models.CASCADE)
+    convocation = models.ForeignKey("Convocation", on_delete=models.CASCADE)
 
     def to_dict(self):
         m = model_to_dict(self, fields=[
@@ -111,8 +111,8 @@ def parse_fullname(person_name):
 
 
 class Minion2MP2Convocation(models.Model):
-    mp2convocation = models.ForeignKey("MP2Convocation")
-    minion = models.ForeignKey("Minion")
+    mp2convocation = models.ForeignKey("MP2Convocation", on_delete=models.CASCADE)
+    minion = models.ForeignKey("Minion", on_delete=models.CASCADE)
     paid = models.CharField("Засади", max_length=200, db_index=True)
 
     def to_dict(self):

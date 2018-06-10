@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('district', models.CharField(max_length=200, blank=True, verbose_name='Округ')),
                 ('date_from', models.DateField(blank=True)),
                 ('date_to', models.DateField(blank=True)),
-                ('convocation', models.ForeignKey(to='core.Convocation', verbose_name='Скликання')),
+                ('convocation', models.ForeignKey(to='core.Convocation', verbose_name='Скликання', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name_plural': 'Депутати',
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
                 ('name', models.CharField(max_length=200, verbose_name='ПІБ')),
                 ('paid', models.URLField(verbose_name='Засади')),
-                ('mp', models.ForeignKey(to='core.MemberOfParliament', verbose_name='Депутат')),
+                ('mp', models.ForeignKey(to='core.MemberOfParliament', verbose_name='Депутат', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name_plural': 'Помічники',
