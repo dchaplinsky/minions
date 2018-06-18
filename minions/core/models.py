@@ -1,8 +1,9 @@
 import re
-from string import capwords
 from django.db import models
 from django.urls import reverse
 from django.forms.models import model_to_dict
+from core.tools.names import title, parse_fullname, TRANSLITERATOR
+from translitua import translit, UkrainianKMU
 
 
 class Convocation(models.Model):
@@ -82,34 +83,6 @@ class MemberOfParliament(models.Model):
         verbose_name_plural = "Депутати"
 
 
-def title(s):
-    chunks = s.split()
-    chunks = map(lambda x: capwords(x, u"-"), chunks)
-    return u" ".join(chunks)
-
-
-def parse_fullname(person_name):
-    # Extra care for initials (especialy those without space)
-    person_name = re.sub("\s+", " ",
-                         person_name.replace(".", ". ").replace('\xa0', " "))
-
-    chunks = person_name.strip().split(" ")
-
-    last_name = ""
-    first_name = ""
-    patronymic = ""
-
-    if len(chunks) == 2:
-        last_name = title(chunks[0])
-        first_name = title(chunks[1])
-    elif len(chunks) > 2:
-        last_name = title(" ".join(chunks[:-2]))
-        first_name = title(chunks[-2])
-        patronymic = title(chunks[-1])
-
-    return last_name, first_name, patronymic
-
-
 class Minion2MP2Convocation(models.Model):
     mp2convocation = models.ForeignKey("MP2Convocation", on_delete=models.CASCADE)
     minion = models.ForeignKey("Minion", on_delete=models.CASCADE)
@@ -119,32 +92,34 @@ class Minion2MP2Convocation(models.Model):
         """
         Convert Minion model to an indexable presentation for ES.
         """
+        all_persons = set()
+        names_autocomplete = set()
+
         d = model_to_dict(self, fields=["paid"])
 
         d["mp"] = self.mp2convocation.to_dict()
 
-        def generate_suggestions(last_name, first_name, patronymic):
-            if not last_name:
-                return []
+        all_persons.add("{}, {}".format(self.minion.name, "Помічник"))
+        l, f, p, _ = parse_fullname(self.minion.name)
+        for tr_name in TRANSLITERATOR.transliterate(l, f, p):
+            all_persons.add("{}, {}".format(tr_name, "Помічник"))
 
-            return [
-                " ".join([last_name, first_name, patronymic]),
-                " ".join([first_name, patronymic, last_name]),
-                " ".join([first_name, last_name])
-            ]
+        all_persons.add("{}, {}".format(self.mp2convocation.mp.name, "Депутат"))
+        l, f, p, _ = parse_fullname(self.mp2convocation.mp.name)
+        for tr_name in TRANSLITERATOR.transliterate(l, f, p):
+            all_persons.add("{}, {}".format(tr_name, "Депутат"))
 
-        d["name_suggest"] = {
-            "input": generate_suggestions(*parse_fullname(self.minion.name))
-        }
-
-        d["mp_name_suggest"] = {
-            "input": generate_suggestions(
-                *parse_fullname(self.mp2convocation.mp.name))
-        }
+        names_autocomplete.add(title(self.minion.name))
+        names_autocomplete.add(translit(title(self.minion.name), UkrainianKMU))
+        names_autocomplete.add(title(self.mp2convocation.mp.name))
+        names_autocomplete.add(translit(title(self.mp2convocation.mp.name), UkrainianKMU))
 
         d["_id"] = self.id
         d["id"] = self.minion.id
         d["name"] = self.minion.name
+        d["companies"] = [self.mp2convocation.party]
+        d["persons"] = list(filter(None, all_persons))
+        d["names_autocomplete"] = list(names_autocomplete)
 
         return d
 

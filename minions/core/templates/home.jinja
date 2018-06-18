@@ -22,7 +22,7 @@
                 <form class="form_search" action="{{ url("search") }}" method="GET">
                     <div class="input_wrap cf">
                         <input type="hidden" name="is_exact" value="" />
-                        <input class="input_search f_left" type="text" placeholder="Знайти посiпаку..." name="q" id="search-q" data-endpoint="{{ url("suggest") }}" autocomplete="off" {% if q %}value="{{ q }}"{% endif %}>
+                        <input class="input_search f_left search-form-q" type="text" placeholder="Знайти посiпаку..." name="q" id="search-q" data-endpoint="{{ url("search>suggest") }}" autocomplete="off" {% if q %}value="{{ q }}"{% endif %}>
                         <input class="submit_search f_left" type="submit" name="submit" value="">
                     </div>
                 </form>

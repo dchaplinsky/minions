@@ -1,11 +1,42 @@
 from elasticsearch_dsl import (
-    DocType, Completion, Object, Keyword, Text)
+    DocType, Completion, Object, Keyword, Text, analyzer, tokenizer,
+    Index
+)
+
+MINIONS_INDEX = "minions"
 
 
+minions_idx = Index(MINIONS_INDEX)
+
+namesAutocompleteAnalyzer = analyzer(
+    'namesAutocompleteAnalyzer',
+    tokenizer=tokenizer(
+        'autocompleteTokenizer',
+        type='edge_ngram',
+        min_gram=2,
+        max_gram=20,
+        token_chars=[
+            'letter',
+            'digit'
+        ]
+    ),
+    filter=[
+        "lowercase"
+    ]
+)
+namesAutocompleteSearchAnalyzer = analyzer(
+    'namesAutocompleteSearchAnalyzer',
+    tokenizer=tokenizer("lowercase")
+)
+
+minions_idx.analyzer(namesAutocompleteAnalyzer)
+minions_idx.analyzer(namesAutocompleteSearchAnalyzer)
+
+
+@minions_idx.doc_type
 class Minion(DocType):
     """Person document."""
-    name_suggest = Completion(preserve_separators=False)
-    mp_name_suggest = Completion(preserve_separators=False)
+
     paid = Keyword(index=False)
     name = Text(
         index=True, analyzer='ukrainian',
@@ -20,6 +51,15 @@ class Minion(DocType):
             )
         }
     )
+
+    persons = Text(analyzer='ukrainian', copy_to="all")
+    companies = Text(analyzer='ukrainian', copy_to="all")
+
+    names_autocomplete = Text(
+        analyzer='namesAutocompleteAnalyzer',
+        search_analyzer="namesAutocompleteSearchAnalyzer"
+    )
+    all = Text(analyzer='ukrainian')
 
     class Meta:
         index = 'minions'
