@@ -2,8 +2,10 @@ import re
 from django.db import models
 from django.urls import reverse
 from django.forms.models import model_to_dict
-from core.tools.names import title, parse_fullname, TRANSLITERATOR
+
 from translitua import translit, UkrainianKMU
+
+from core.tools.names import title, parse_fullname, TRANSLITERATOR
 
 
 class Convocation(models.Model):

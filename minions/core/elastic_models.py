@@ -4,8 +4,6 @@ from elasticsearch_dsl import (
 )
 
 MINIONS_INDEX = "minions"
-
-
 minions_idx = Index(MINIONS_INDEX)
 
 namesAutocompleteAnalyzer = analyzer(
@@ -60,6 +58,3 @@ class Minion(DocType):
         search_analyzer="namesAutocompleteSearchAnalyzer"
     )
     all = Text(analyzer='ukrainian')
-
-    class Meta:
-        index = 'minions'
