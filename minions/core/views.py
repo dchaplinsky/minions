@@ -1,6 +1,6 @@
 from operator import itemgetter
 from collections import Counter
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.db.models import Count
@@ -157,7 +157,8 @@ def minion_details(request, minion_id):
     })
 
 
-def handler404(request):
-    response = render(request, '404.jinja')
-    response.status_code = 404
-    return response
+def handler404(request, exception):
+    response = render_to_string('404.jinja')
+    return HttpResponseNotFound(
+        response, content_type="text/html"
+    )
