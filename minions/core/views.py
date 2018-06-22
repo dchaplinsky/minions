@@ -46,19 +46,17 @@ class SuggestView(View):
             should=[
                 Q(
                     "match_phrase",
-                    names_autocomplete={
+                    names_autocomplete__raw={
                         "query": q,
                         "boost": 2
                     },
                 ),
                 Q(
-                    "span_first",
-                    match=Q(
-                        "span_term",
-                        names_autocomplete=q
-                    ),
-                    end=4,
-                    boost=2
+                    "match_phrase_prefix",
+                    names_autocomplete__raw={
+                        "query": q,
+                        "boost": 2
+                    },
                 )
             ]
         )[:200]

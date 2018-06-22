@@ -14,6 +14,9 @@ $(function() {
         matcher: function() {
             return true;
         },
+        sorter: function(items) {
+            return items
+        },
         highlighter: function(instance) {
             return instance;
         },
