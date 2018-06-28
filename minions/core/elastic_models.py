@@ -62,3 +62,7 @@ class Minion(DocType):
         fields={'raw': Text(index=True)}
     )
     all = Text(analyzer='ukrainian')
+
+    class Meta:
+        index = MINIONS_INDEX
+        doc_type = "minions_minions_doctype"
