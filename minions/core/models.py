@@ -3,8 +3,6 @@ from django.db import models
 from django.urls import reverse
 from django.forms.models import model_to_dict
 
-from translitua import translit, UkrainianKMU
-
 from names_translator.name_utils import (
     parse_and_generate,
     autocomplete_suggestions,
