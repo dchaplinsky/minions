@@ -5,9 +5,7 @@ from django.forms.models import model_to_dict
 
 from names_translator.name_utils import (
     parse_and_generate,
-    autocomplete_suggestions,
-    concat_name,
-    title
+    autocomplete_suggestions
 )
 
 
