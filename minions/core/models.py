@@ -5,7 +5,12 @@ from django.forms.models import model_to_dict
 
 from translitua import translit, UkrainianKMU
 
-from core.tools.names import title, parse_fullname, TRANSLITERATOR
+from names_translator.name_utils import (
+    parse_and_generate,
+    autocomplete_suggestions,
+    concat_name,
+    title
+)
 
 
 class Convocation(models.Model):
@@ -101,20 +106,12 @@ class Minion2MP2Convocation(models.Model):
 
         d["mp"] = self.mp2convocation.to_dict()
 
-        all_persons.add("{}, {}".format(self.minion.name, "Помічник"))
-        l, f, p, _ = parse_fullname(self.minion.name)
-        for tr_name in TRANSLITERATOR.transliterate(l, f, p):
-            all_persons.add("{}, {}".format(tr_name, "Помічник"))
+        all_persons |= parse_and_generate(self.mp2convocation.mp.name, "Депутат")
+        names_autocomplete |= autocomplete_suggestions(self.mp2convocation.mp.name)
 
-        all_persons.add("{}, {}".format(self.mp2convocation.mp.name, "Депутат"))
-        l, f, p, _ = parse_fullname(self.mp2convocation.mp.name)
-        for tr_name in TRANSLITERATOR.transliterate(l, f, p):
-            all_persons.add("{}, {}".format(tr_name, "Депутат"))
 
-        names_autocomplete.add(title(self.minion.name))
-        names_autocomplete.add(translit(title(self.minion.name), UkrainianKMU))
-        names_autocomplete.add(title(self.mp2convocation.mp.name))
-        names_autocomplete.add(translit(title(self.mp2convocation.mp.name), UkrainianKMU))
+        all_persons |= parse_and_generate(self.minion.name, "Помічник")
+        names_autocomplete |= autocomplete_suggestions(self.minion.name)
 
         d["_id"] = self.id
         d["id"] = self.minion.id
