@@ -23,8 +23,8 @@ class Command(BaseCommand):
         with ZipFile(fp) as zip_arch:
             for fname in zip_arch.namelist():
                 if fname.lower().endswith("json"):
-                    with zip_arch.open(fname, 'r') as fp_raw:
-                        data = json.load(fp_raw)
+                    with zip_arch.open(fname) as fp_raw:
+                        data = json.loads(fp_raw.read().decode("utf-16"))
                     break
 
         return data
@@ -38,23 +38,6 @@ class Command(BaseCommand):
         minions_cnt = 0
         links_cnt = 0
         minion_links_cnt = 0
-
-        # # MP2Convocation.objects.filter(
-        # #     convocation=options["convocation"]).delete()
-
-        # fname = "core/data/rada%s.tsv" % options["convocation"]
-
-        # if not os.path.exists(fname):
-        #     raise CommandError(
-        #         "TSV file with parliament members doesn't exists for a given"
-        #         " convocation")
-
-        # if not os.path.exists(options["source"]):
-        #     raise CommandError(
-        #         "TSV file with parliament members minions doesn't exists")
-
-        # with open(fname, "r", encoding="utf-8") as fp:
-        #     r = reader(fp, delimiter='\t')
 
         regions = {
             r["id"]: r["name"] for r in data["regions"]
