@@ -101,7 +101,7 @@ class Command(BaseCommand):
                 _, link_created = Minion2MP2Convocation.objects.get_or_create(
                     mp2convocation=dep,
                     minion=minion,
-                    paid=minion_row["type_id"] in [2, 3]
+                    paid="На платній основі" if minion_row["type_id"] in [2, 3] else "На громадських засадах"
                 )
 
                 if created:
