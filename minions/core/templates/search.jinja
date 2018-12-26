@@ -37,15 +37,8 @@
                         <div class="panel-body">
                             <div class="col-md-12">
                                 <a href="{{ url("minion_details", minion.id ) }}" class="link_nb">
-                                    <div class="support">Помічник у депутата</div>
                                     <p>{{ minion.name }}</p>
-                                    <div class="convocation">
-                                        <div class="label">
-                                            {{ mp.list[0].mp.convocation }} скликання
-                                        </div>
-                                        <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}" title="{{ minion.paid }}"></span>
-                                    </div>
-                                    <div class="label">Дивитись більше</div>
+                                    <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}" title="{{ minion.paid }}">{{ minion.paid }}</span>
                                 </a>
                             </div>
                         </div>

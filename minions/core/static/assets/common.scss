@@ -903,6 +903,19 @@ body {
     justify-content: center;
     li{
         height: 100%;
+
+        &:first-child{
+            a{
+                border-top-left-radius: 6px !important;
+                border-bottom-left-radius: 6px !important;
+            }
+        }
+        &:last-child{
+            a{
+                border-top-right-radius: 6px !important;
+                border-bottom-right-radius: 6px !important;
+            }
+        }
         a, span{
             display: flex;
             align-items: center;
@@ -1012,7 +1025,7 @@ body {
 
 @media screen and (max-width: 768px) {
         .pagination{
-        height: 40px;
+        height: 30px;
         margin-top: 40px;
         display: flex;
         justify-content: center;
@@ -1020,9 +1033,11 @@ body {
             height: 100%;
             a, span{
                 display: flex;
+                padding-left: 0px !important;
+                padding-right: 0px !important;
                 align-items: center;
                 justify-content: center;
-                min-width: 40px;
+                min-width: 30px;
                 height: 100%;
                 font-size: 16px;
                 color: black;
@@ -1083,7 +1098,7 @@ body {
 
 @media screen and (max-width: 480px) {
     .pagination{
-        height: 40px;
+        height: 30px;
         margin-top: 40px;
         display: flex;
         justify-content: center;
@@ -1093,7 +1108,7 @@ body {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                min-width: 40px;
+                min-width: 30px;
                 height: 100%;
                 font-size: 16px;
                 color: black;
