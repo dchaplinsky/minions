@@ -25,14 +25,21 @@
 
             <div class="block_wrap block_row cf">
                 {% for mp in minion.minion2mp2convocation_set.select_related("mp2convocation", "mp2convocation__mp") %}
-                    <div class="col-md-12"  itemscope itemtype="http://schema.org/Person" itemprop="knows">
-                        <div class="col-md-6">
-                            <p><a href="{{ url("mp_details", mp.mp2convocation.mp.id) }}" itemprop="url"><span itemprop="name">{{ mp.mp2convocation.mp.name }}</span></a>
-                            <span itemprop="jobTitle" class="hide">Депутат</span></p>
-                        </div>
-                        <div class="col-md-6" itemscope itemtype="http://schema.org/Organization" itemprop="worksFor">
-                            <p><span itemprop="name">{{ mp.mp2convocation.party }}</span>, <a href="{{ url("convocation", mp.mp2convocation.convocation_id) }}">{{ mp.mp2convocation.convocation_id }} скликання</a></p>
-                            <span class="circle {% if mp.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}" title="{{ mp.paid }}"></span>
+                    <div class="col-md-12"  data-aos="zoom-in" itemscope itemtype="http://schema.org/Person" itemprop="knows">
+                        <div class="wrap">
+                            <div class="col-md-6 name">
+                                <p><a href="{{ url("mp_details", mp.mp2convocation.mp.id) }}" itemprop="url"><span itemprop="name">{{ mp.mp2convocation.mp.name }}</span></a>
+                                <span itemprop="jobTitle" class="hide">Депутат</span></p>
+                            </div>
+                            <div class="col-md-6 panel_body" itemscope itemtype="http://schema.org/Organization" itemprop="worksFor">
+                                <div class="conv">
+                                    <a href="{{ url("convocation", mp.mp2convocation.convocation_id) }}">{{ mp.mp2convocation.convocation_id }} скликання</a>
+                                    <span class="circle blue" title="На платній основі"></span>
+                                </div>
+                                <p>
+                                    <span itemprop="name">{{ mp.mp2convocation.party }}</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

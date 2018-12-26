@@ -28,13 +28,13 @@
         <div class="row block_header cf">
             <div class="col-md-12">
                 <div class="header_content">
-                    <h2>{{ convocation.number }} скликання</h2>
+                    <h2 class="scale-up-center">{{ convocation.number }} скликання</h2>
                 </div>
-                <div class="text-period">
+                <div class="text-period scale-up-center">
                     <p>{% if convocation.year_from %}{{ convocation.year_from }}{% endif %}
                        {% if convocation.year_to %}—{{ convocation.year_to }}{% endif %}</p>
                 </div>
-                <div class="count_helpers">
+                <div class="count_helpers scale-up-center">
                     <p>
                         Знаємо про <strong>{{ convocation.num_minions }}</strong> помічників <br> у
                         <strong>{{ convocation.num_mps }}</strong> нардепів
@@ -92,7 +92,7 @@
                         </div>
                         <div id="collapse{{ mp_by_letter.mp.id }}" class="panel-collapse collapse">
                             {% for minion in minions %}
-                            <div class="panel-body" itemprop="knows" itemscope itemtype="http://schema.org/Person">
+                            <div class="panel-body scale-up-center" itemprop="knows" itemscope itemtype="http://schema.org/Person">
                                 <div class="col-md-12">
                                     <a href="{{ url("minion_details", minion.minion.id ) }}" class="link_nb">
                                         <p itemprop="name">{{ minion.minion.name }}</p>

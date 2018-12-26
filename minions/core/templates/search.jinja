@@ -8,12 +8,14 @@
     {% if minions.has_next() %}<link rel="next" href="?{{ updated_querystring(request, {'page': minions.next_page_number()}) }}" />{% endif %}
 {% endblock %}
 
+{% block body_class %}search_page{% endblock %}
+
 {% block content %}
-    <div class="row">
+    <div class="row caption">
         <div class="col-lg-12">
             <h2 class="text-center">
             {% if q %}
-            За пошуковим запитом «{{ q }}» знайдено {{ minions|length }} запис{{ minions|length|ua_pluralize("", "и", "ів", "ів") }}
+            За пошуковим запитом <span>«{{ q }}»</span> знайдено {{ minions|length }} запис{{ minions|length|ua_pluralize("", "и", "ів", "ів") }}
             {% else %}
             За пошуковим запитом знайдено {{ minions|length }} запис{{ minions|length|ua_pluralize("", "и", "ів", "ів") }}
             {% endif %}
@@ -21,8 +23,7 @@
         </div><!-- /.col-lg-4 -->
     </div><!-- /.row -->
     
-    <div class="container">
-        <section class="main_content cf">
+    <section class="main_content cf">
         {% for mp in minions|groupby('mp.grouper') %}
             <div id="block_abc_1" class="block_wrap panel-group">
                 <div class="block_abc_1 panel panel-default">
@@ -36,8 +37,15 @@
                         <div class="panel-body">
                             <div class="col-md-12">
                                 <a href="{{ url("minion_details", minion.id ) }}" class="link_nb">
+                                    <div class="support">Помічник у депутата</div>
                                     <p>{{ minion.name }}</p>
-                                    <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}" title="{{ minion.paid }}">{{ minion.paid|truncate(25) }}</span>
+                                    <div class="convocation">
+                                        <div class="label">
+                                            {{ mp.list[0].mp.convocation }} скликання
+                                        </div>
+                                        <span class="radius {% if minion.paid == "На громадських засадах" %}yellow{% else %}blue{% endif %}" title="{{ minion.paid }}"></span>
+                                    </div>
+                                    <div class="label">Дивитись більше</div>
                                 </a>
                             </div>
                         </div>
@@ -54,6 +62,7 @@
             </nav>
         </div>
         {% endif %}
-        </section>
-    </div>
+    </section>
+
+    <div class="up" style="width: 3px; height: 1349px; background: rgba(33, 33, 33, 0.2); z-index: 1000; position: fixed; top: 0px; left: 0px;"></div>
 {% endblock %}

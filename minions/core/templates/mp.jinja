@@ -66,7 +66,7 @@
                     </div>
                     {% set minions = convocation.minion2mp2convocation_set.select_related("minion").order_by("-paid", "minion__name").all() %}
                     <div class="bottom_block list_persons cf">
-                        <div class="person_count">
+                        <div class="person_count" data-aos="zoom-in">
                             <p>{{ minions|length }} помiчник{{ minions|length|ua_pluralize("", "и", "ів", "ів") }}</p>
                         </div>
                         <div class="wrap_block cf">
@@ -83,10 +83,14 @@
                             {% endfor %}
                         </div>
                     </div>
+                    <div class="show-more-wrap">
+                        <div class="btn" id="show_more" data-aos="zoom-in">
+                            Показати більше
+                        </div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
-
         </div>
     </section>
 </div>

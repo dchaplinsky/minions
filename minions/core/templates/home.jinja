@@ -13,11 +13,10 @@
         <div class="row block_header cf">
             <div class="col-md-12">
                 <div class="text_content">
-                    <h2>Помічники народних депутатів</h2>
-                    <p>
+                    <h2 data-aos="zoom-in">Помічники народних депутатів</h2>
+                    <p data-aos="zoom-in">
                         Відкрита база даних помічників народних депутатів України створена на основі офіційної інформації Апарату Верховної Ради України.
                     </p>
-                    <small>* Дані про помічників народних депутатів ВР України I-III скликань в Апараті ВР України відсутні.</small>
                 </div>
                 <form class="form_search" action="{{ url("search") }}" method="GET">
                     <div class="input_wrap cf">
@@ -26,6 +25,7 @@
                         <input class="submit_search f_left" type="submit" name="search" value="">
                     </div>
                 </form>
+                <small class="scale-up-center" data-aos="zoom-in">* Дані про помічників народних депутатів ВР України I-III скликань в Апараті ВР України відсутні.</small>
             </div>
         </div>
     </div>
@@ -43,9 +43,9 @@
         </div>
         <div class="col-md-12 elem_blocks cf">
             {% for conv in convocations %}
-            <div class="posipaks_block cf" itemscope itemtype="http://schema.org/Organization">
+            <div class="posipaks_block cf scale-up-center" data-aos="zoom-in" itemscope itemtype="http://schema.org/Organization">
                 <a href="{{ url("convocation", conv.number) }}" itemprop="url">
-                    <div class="col-md-3 block_count_and_period f_left cf">
+                    <div class="col-md-12 block_count_and_period f_left cf">
                         <div class="count f_left">
                             <p>{{ conv.number }}</p>
                             <span itemprop="name" class="hide">{{ conv.number }} слкикання Верховної Ради України</span>
@@ -64,11 +64,11 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-md-9 helpers f_left cf">
-                        <div class="col-md-6 left_block f_left">
+                    <div class="col-md-12 helpers f_left cf">
+                        <div class="col-md-12 left_block f_left">
                             <p><span>{{ conv.num_minions }}</span> помічник{{ conv.num_minions|ua_pluralize("а", "и", "ів", "ів") }} у</p>
                         </div>
-                        <div class="col-md-6 right_block f_left">
+                        <div class="col-md-12 left_block f_left">
                             <p><span itemprop="numberOfEmployees">{{ conv.num_mps }}</span> депутат{{ conv.num_mps|ua_pluralize("а", "ів", "ів", "ів") }}</p>
                         </div>
                     </div>

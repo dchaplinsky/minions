@@ -98,13 +98,17 @@ class Command(BaseCommand):
                         "name": minion_row["fullname"]
                     })
 
-                _, link_created = Minion2MP2Convocation.objects.get_or_create(
-                    mp2convocation=dep,
-                    minion=minion,
-                    paid="На платній основі" if minion_row["type_id"] in [2, 3] else "На громадських засадах"
-                )
+                try:
+                    _, link_created = Minion2MP2Convocation.objects.get_or_create(
+                        mp2convocation=dep,
+                        minion=minion,
+                        paid="На платній основі" if minion_row["type_id"] in [2, 3] else "На громадських засадах"
+                    )
+                except Minion2MP2Convocation.MultipleObjectsReturned:
+                    pass
 
                 if created:
+                    print("{};{}".format(minion.name, mp.name))
                     minions_cnt += 1
 
                 if link_created:

@@ -1,7 +1,10 @@
 {% macro render_pagination(results, url="") %}
     {% if results.paginator.num_pages > 1 %}
     <ul class="pagination">
-        <li{% if not results.has_previous() %} class="disabled"{% endif %}><a href="{{ url }}{% if results.has_previous() %}?{{ updated_querystring(request, {'page': results.previous_page_number()}) }}{% endif %}">«</a></li>
+        <li{% if not results.has_previous() %} class="disabled"{% endif %}><a href="{{ url }}{% if results.has_previous() %}?{{ updated_querystring(request, {'page': results.previous_page_number()}) }}{% endif %}"><svg width="12" height="21" viewBox="0 0 12 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10.8536" y1="0.353553" x2="0.353552" y2="10.8536" stroke="#7F7F7F" />
+            <line x1="0.353553" y1="10.1464" x2="10.8536" y2="20.6464" stroke="#7F7F7F" />
+        </svg></a></li>
         {% for page_num in results.contextual_page_range %}
         {% if page_num == None %}
             <li class="disabled"><span>&hellip;</span></li>
@@ -9,7 +12,10 @@
             <li{% if results.number == page_num %} class="active"{% endif %}><a href="{{ url }}?{{ updated_querystring(request, {'page': page_num}) }}">{{ page_num }}</a></li>
         {% endif %}
         {% endfor %}
-        <li{% if not results.has_next() %} class="disabled"{% endif %}><a href="{{ url }}{% if results.has_next() %}?{{ updated_querystring(request, {'page': results.next_page_number()}) }}{% endif %}">»</a></li>
+        <li{% if not results.has_next() %} class="disabled"{% endif %}><a href="{{ url }}{% if results.has_next() %}?{{ updated_querystring(request, {'page': results.next_page_number()}) }}{% endif %}"><svg width="12" height="21" viewBox="0 0 12 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0.646447" y1="20.6464" x2="11.1464" y2="10.1464" stroke="#7F7F7F" />
+            <line x1="11.1464" y1="10.8536" x2="0.646446" y2="0.353553" stroke="#7F7F7F" />
+        </svg></a></li>
     </ul>
     {% endif %}
 {% endmacro %}
