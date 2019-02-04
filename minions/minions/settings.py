@@ -14,12 +14,14 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+def get_env_str(k, default):
+    return os.environ.get(k, default)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'iif2=3*v^#fh!x%t^%a^wsi%*d-+d9hi8g5nl##u#=2*au2z%i'
+SECRET_KEY = get_env_str('SECRET_KEY', 'iif2=3*v^#fh!x%t^%a^wsi%*d-+d9hi8g5nl##u#=2*au2z%i')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -82,6 +84,11 @@ WSGI_APPLICATION = 'minions.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': get_env_str('DB_NAME', None),
+        'USER': get_env_str('DB_USER', None),
+        'PASSWORD': get_env_str('DB_PASS', None),
+        'HOST': get_env_str('DB_HOST', None),
+        'PORT': get_env_str('DB_PORT', 5432)
     }
 }
 
@@ -105,8 +112,8 @@ ELASTICSEARCH_CONNECTIONS = {
 }
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_ROOT = get_env_str('MEDIA_ROOT', os.path.join(BASE_DIR, "media"))
+STATIC_ROOT = get_env_str('STATIC_ROOT', os.path.join(BASE_DIR, "static"))
 MEDIA_URL = '/media/'
 
 from django_jinja.builtins import DEFAULT_EXTENSIONS
@@ -165,6 +172,25 @@ THUMBNAIL_ALIASES = {
     },
 }
 
+import raven
+
+try:
+    GIT_VERSION = raven.fetch_git_sha(os.path.abspath(os.path.join(BASE_DIR, "..")))
+except raven.exceptions.InvalidGitRepository:
+    GIT_VERSION = "undef"
+    pass
+
+RAVEN_CONFIG = {
+    'dsn': get_env_str('RAVEN_DSN', None),
+    'release': get_env_str('VERSION', GIT_VERSION),
+}
+
+ELASTICSEARCH_CONNECTIONS = {
+    'default': {
+        'hosts': get_env_str('ELASTICSEARCH_DSN', 'localhost:9200'),
+        'timeout': 20
+    }
+}
 
 CATALOG_PER_PAGE = 10
 
