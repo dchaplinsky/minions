@@ -17,6 +17,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def get_env_str(k, default):
     return os.environ.get(k, default)
 
+def get_env_str_list(k, default=""):
+    if os.environ.get(k) is not None:
+        return os.environ.get(k).strip().split(" ")
+    return default
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -26,7 +31,7 @@ SECRET_KEY = get_env_str('SECRET_KEY', 'iif2=3*v^#fh!x%t^%a^wsi%*d-+d9hi8g5nl##u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = get_env_str_list('ALLOWED_HOSTS', [])
 
 
 # Application definition
@@ -102,14 +107,6 @@ TIME_ZONE = 'Europe/Kiev'
 USE_I18N = False
 USE_L10N = False
 USE_TZ = False
-
-# Setup Elasticsearch default connection
-ELASTICSEARCH_CONNECTIONS = {
-    'default': {
-        'hosts': 'localhost',
-        'timeout': 20
-    }
-}
 
 STATIC_URL = '/static/'
 MEDIA_ROOT = get_env_str('MEDIA_ROOT', os.path.join(BASE_DIR, "media"))
