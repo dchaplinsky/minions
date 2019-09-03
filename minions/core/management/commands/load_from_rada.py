@@ -56,7 +56,7 @@ class Command(BaseCommand):
 
     @retry(requests.exceptions.ConnectionError)
     def fetch_dataset(self, convocation):
-        data_url = "http://data.rada.gov.ua/ogd/mps/skl{}/mps-data-json.zip".format(convocation)
+        data_url = "https://data.rada.gov.ua/ogd/mps/skl{}/mps-data-json.zip".format(convocation)
         r = requests.get(data_url, stream=True)
         fp = BytesIO(r.content)
 
