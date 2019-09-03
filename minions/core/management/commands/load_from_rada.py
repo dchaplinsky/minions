@@ -56,7 +56,7 @@ def retry(exceptions, tries=4, delay=3, backoff=2, logger=None):
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument("--convocation", type=int, default=8)
+        parser.add_argument("--convocation", type=int, default=9)
 
     @retry(requests.exceptions.ConnectionError)
     def fetch_dataset(self, convocation):
