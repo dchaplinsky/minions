@@ -2,10 +2,14 @@ import time
 from functools import wraps
 import os.path
 import json
-import requests
 from zipfile import ZipFile
 from io import BytesIO
+
+import requests
 from dateutil.parser import parse as dt_parse
+from translitua import translitua
+
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand, CommandError
 
 from core.models import (
@@ -63,6 +67,7 @@ class Command(BaseCommand):
         data_url = "https://data.rada.gov.ua/ogd/mps/skl{}/mps-data-json.zip".format(
             convocation
         )
+
         r = requests.get(data_url, stream=True)
         fp = BytesIO(r.content)
 
@@ -119,6 +124,20 @@ class Command(BaseCommand):
                     link=dep_data["link"],
                     defaults={"link": dep_data["link"], "name": dep_data["name"]},
                 )
+
+            if not mp.img and row.get("photo"):
+                resp = requests.get(row["photo"])
+
+                if resp.status_code != 200:
+                    print("Cannot download image %s for %s" % (
+                        row["photo"],
+                        mp.name
+                    ))
+                else:
+                    mp.img.save(
+                        translitua(mp.name) + ".jpg", ContentFile(resp.content))
+                    mp.save()
+
 
             dep, link_created = MP2Convocation.objects.update_or_create(
                 convocation=conv,
