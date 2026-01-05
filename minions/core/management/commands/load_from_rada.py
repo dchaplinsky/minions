@@ -75,7 +75,7 @@ class Command(BaseCommand):
             for fname in zip_arch.namelist():
                 if fname.lower().endswith("json"):
                     with zip_arch.open(fname) as fp_raw:
-                        data = json.loads(fp_raw.read().decode("utf-16"))
+                        data = json.loads(fp_raw.read().decode("utf-8"))
                     break
 
         return data
@@ -156,7 +156,7 @@ class Command(BaseCommand):
             if link_created:
                 links_cnt += 1
 
-            for minion_row in row["assistants"] or []:
+            for minion_row in row.get("assistants", []) or []:
                 minion, created = Minion.objects.get_or_create(
                     name__iexact=minion_row["fullname"],
                     defaults={"name": minion_row["fullname"]},
