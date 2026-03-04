@@ -9,7 +9,9 @@ import requests
 from dateutil.parser import parse as dt_parse
 from translitua import translitua
 
+from django.conf import settings
 from django.core.files.base import ContentFile
+from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 
 from core.models import (
@@ -184,3 +186,7 @@ class Command(BaseCommand):
             "%s MPs, %s links and %s minions (%s links) has been created"
             % (mp_cnt, links_cnt, minions_cnt, minion_links_cnt)
         )
+
+        if mp_cnt or links_cnt or minions_cnt or minion_links_cnt:
+            call_command("export_jsonlines", settings.EXPORT_FILE_LOCATION)
+            print("Exported data to %s" % settings.EXPORT_FILE_LOCATION)

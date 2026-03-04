@@ -190,6 +190,7 @@ ELASTICSEARCH_CONNECTIONS = {
 }
 
 CATALOG_PER_PAGE = 10
+EXPORT_FILE_LOCATION = get_env_str('EXPORT_FILE_LOCATION', os.path.join(BASE_DIR, "export.jsonl"))
 
 try:
     from .local_settings import *
