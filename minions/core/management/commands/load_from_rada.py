@@ -187,6 +187,5 @@ class Command(BaseCommand):
             % (mp_cnt, links_cnt, minions_cnt, minion_links_cnt)
         )
 
-        if mp_cnt or links_cnt or minions_cnt or minion_links_cnt:
-            call_command("export_jsonlines", settings.EXPORT_FILE_LOCATION)
-            print("Exported data to %s" % settings.EXPORT_FILE_LOCATION)
+        call_command("export_jsonlines", settings.EXPORT_FILE_LOCATION)
+        print("Exported data to %s" % settings.EXPORT_FILE_LOCATION)
