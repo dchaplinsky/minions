@@ -143,17 +143,18 @@ class Command(BaseCommand):
                     defaults={"link": dep_data["link"], "name": dep_data["name"]},
                 )
 
-            if not mp.img and row.get("photo"):
+            photo_url = (row.get("photo") or "").strip()
+            if not mp.img and photo_url:
                 try:
-                    resp = photo_session.get(row["photo"], timeout=15)
+                    resp = photo_session.get(photo_url, timeout=15)
                 except requests.RequestException as e:
                     print("Cannot download image %s for %s: %s" % (
-                        row["photo"], mp.name, e
+                        photo_url, mp.name, e
                     ))
                 else:
                     if resp.status_code != 200:
                         print("Cannot download image %s for %s (HTTP %s)" % (
-                            row["photo"], mp.name, resp.status_code
+                            photo_url, mp.name, resp.status_code
                         ))
                     else:
                         mp.img.save(
