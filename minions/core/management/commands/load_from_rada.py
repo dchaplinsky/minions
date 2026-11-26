@@ -6,6 +6,8 @@ from zipfile import ZipFile
 from io import BytesIO
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from dateutil.parser import parse as dt_parse
 from translitua import translitua
 
@@ -60,6 +62,19 @@ def retry(exceptions, tries=4, delay=3, backoff=2, logger=None):
     return deco_retry
 
 
+def _make_photo_session():
+    session = requests.Session()
+    retry_strategy = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[500, 502, 503, 504],
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+    return session
+
+
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--convocation", type=int, default=9)
@@ -84,6 +99,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         data = self.fetch_dataset(options["convocation"])
+        photo_session = _make_photo_session()
         mps = {}
         mp_cnt = 0
         minions_cnt = 0
@@ -128,17 +144,21 @@ class Command(BaseCommand):
                 )
 
             if not mp.img and row.get("photo"):
-                resp = requests.get(row["photo"])
-
-                if resp.status_code != 200:
-                    print("Cannot download image %s for %s" % (
-                        row["photo"],
-                        mp.name
+                try:
+                    resp = photo_session.get(row["photo"], timeout=15)
+                except requests.RequestException as e:
+                    print("Cannot download image %s for %s: %s" % (
+                        row["photo"], mp.name, e
                     ))
                 else:
-                    mp.img.save(
-                        translitua(mp.name) + ".jpg", ContentFile(resp.content))
-                    mp.save()
+                    if resp.status_code != 200:
+                        print("Cannot download image %s for %s (HTTP %s)" % (
+                            row["photo"], mp.name, resp.status_code
+                        ))
+                    else:
+                        mp.img.save(
+                            translitua(mp.name) + ".jpg", ContentFile(resp.content))
+                        mp.save()
 
 
             dep, link_created = MP2Convocation.objects.update_or_create(
